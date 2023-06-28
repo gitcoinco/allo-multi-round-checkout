@@ -11,12 +11,12 @@ contract MultiRoundCheckout is OwnableUpgradeable, PausableUpgradeable, Reentran
     */
     function vote(bytes[][] memory votes, address[] memory rounds) public nonReentrant {
         for (uint i = 0; i < rounds.length; i++) {
-            IRoundImplementation round = IRoundImplementation(payable(rounds[i]));
+            IVotable round = IVotable(payable(rounds[i]));
             round.vote(votes[i]);
         }
     }
 }
 
-interface IRoundImplementation {
+interface IVotable {
     function vote(bytes[] memory data) external payable;
 }

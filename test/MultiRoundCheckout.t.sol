@@ -51,7 +51,7 @@ contract MrcTest is Test {
     }
 }
 
-contract MockRoundImplementation is IRoundImplementation {
+contract MockRoundImplementation is IVotable {
     bytes[] public receivedVotes;
 
     function vote(bytes[] memory data) external payable {
