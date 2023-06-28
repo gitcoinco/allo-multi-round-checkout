@@ -2,8 +2,7 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "../allo-contracts/contracts/round/IRoundImplementation.sol";
-import "hardhat/console.sol";
+import "../allo-contracts/contracts/round/RoundImplementation.sol";
 
 contract MultiRoundCheckout is OwnableUpgradeable {
     /**
@@ -12,7 +11,7 @@ contract MultiRoundCheckout is OwnableUpgradeable {
     function vote(bytes[][] calldata votes, address[] calldata rounds) public {
         // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
         for (uint i = 0; i < rounds.length; i++) {
-            IRoundImplementation round = IRoundImplementation(rounds[i]);
+            RoundImplementation round = RoundImplementation(payable(rounds[i]));
             bytes[] memory votesForRound = votes[i];
             round.vote(votesForRound);
         }
