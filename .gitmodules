@@ -1,0 +1,3 @@
+[submodule "allo-contracts"]
+	path = allo-contracts
+	url = https://github.com/allo-protocol/allo-contracts
