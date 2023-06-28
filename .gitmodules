@@ -1,6 +1,3 @@
-[submodule "allo-contracts"]
-	path = allo-contracts
-	url = https://github.com/allo-protocol/allo-contracts
 [submodule "lib/forge-std"]
 	path = lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
