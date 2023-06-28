@@ -58,7 +58,7 @@ contract MockRoundImplementation is IRoundImplementation {
         receivedVotes = data;
     }
 
-    function getReceivedVotes() public returns (bytes[] memory) {
+    function getReceivedVotes() public view returns (bytes[] memory) {
         return receivedVotes;
     }
 }
