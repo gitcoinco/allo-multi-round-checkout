@@ -31,21 +31,21 @@ contract MrcTest is Test {
         votes[0][2] = "C";
 
         votes[1] = new bytes[](3);
-        votes[1][0] = "A";
-        votes[1][1] = "B";
-        votes[1][2] = "C";
+        votes[1][0] = "X";
+        votes[1][1] = "Y";
+        votes[1][2] = "Z";
 
         votes[2] = new bytes[](3);
-        votes[2][0] = "A";
-        votes[2][1] = "B";
-        votes[2][2] = "C";
+        votes[2][0] = "P";
+        votes[2][1] = "Q";
+        votes[2][2] = "R";
 
         mrc.vote(votes, rounds);
 
         for (uint i = 0; i < rounds.length; i++) {
             bytes[] memory receivedVotes = MockRoundImplementation(rounds[i]).getReceivedVotes();
             for (uint j = 0; j < receivedVotes.length; j++) {
-                assertEq(receivedVotes[j],votes[i][j]);
+                assertEq(receivedVotes[j], votes[i][j]);
             }
         }
     }
