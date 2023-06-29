@@ -18,6 +18,9 @@ contract MrcTest is Test {
     }
 
     function testVotesPassing() public {
+        console.log(address(this));
+        vm.deal(address(this), 10 ether);
+
         address[] memory rounds = new address[](3);
         rounds[0] = address(round1);
         rounds[1] = address(round2);
@@ -40,13 +43,30 @@ contract MrcTest is Test {
         votes[2][1] = "Q";
         votes[2][2] = "R";
 
-        mrc.vote(votes, rounds);
+        uint256[] memory values = new uint256[](3);
+        values[0] = 1;
+        values[1] = 2;
+        values[2] = 3;
 
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < values.length; i++) {
+            totalValue += values[i];
+        }
+
+        mrc.vote{value: totalValue}(votes, rounds, values);
+
+        /* Assert that votes were passed on correctly */
         for (uint i = 0; i < rounds.length; i++) {
             bytes[] memory receivedVotes = MockRoundImplementation(rounds[i]).getReceivedVotes();
             for (uint j = 0; j < receivedVotes.length; j++) {
                 assertEq(receivedVotes[j], votes[i][j]);
             }
+        }
+
+        /* Assert that values were sent along correctly */
+        for (uint i = 0; i < rounds.length; i++) {
+            assertEq(address(rounds[i]).balance, values[i]);
         }
     }
 }
