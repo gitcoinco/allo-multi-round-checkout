@@ -16,5 +16,7 @@ contract MultiRoundCheckout is OwnableUpgradeable, PausableUpgradeable, Reentran
             IVotable round = IVotable(payable(rounds[i]));
             round.vote{value: msg.value}(votes[i]);
         }
+
+        require(address(this).balance == 0, "MRC cannot hold ether");
     }
 }
