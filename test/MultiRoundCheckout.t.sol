@@ -18,6 +18,7 @@ contract MrcTest is Test {
         round2 = new MockRoundImplementation();
         round3 = new MockRoundImplementation();
         mrc = new MultiRoundCheckout();
+        mrc.initialize();
 
         rounds[0] = address(round1);
         rounds[1] = address(round2);
@@ -41,6 +42,36 @@ contract MrcTest is Test {
         values[0] = 1;
         values[1] = 2;
         values[2] = 3;
+    }
+
+    function testOwnership() public {
+        assertEq(mrc.owner(), address(this));
+    }
+
+    function testPauseOnlyOwner() public {
+        vm.prank(address(0x0));
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        mrc.pause();
+    }
+
+    function testPauseVoteRevert() public {
+        mrc.pause();
+
+        vm.deal(address(this), 10 ether);
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < values.length; i++) {
+            totalValue += values[i];
+        }
+
+        vm.expectRevert(bytes("Pausable: paused"));
+        mrc.vote{value: totalValue}(votes, rounds, values);
+    }
+
+    function testUnpauseOnlyOwner() public {
+        vm.prank(address(0x0));
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        mrc.unpause();
     }
 
     function testVotesPassing() public {
