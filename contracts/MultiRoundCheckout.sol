@@ -23,6 +23,14 @@ contract MultiRoundCheckout is
         __ReentrancyGuard_init();
     }
 
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
     /**
      * votes is a 2d array. first index is the index of the round address in the second param.
      */
