@@ -16,6 +16,13 @@ contract MultiRoundCheckout is
     PausableUpgradeable,
     ReentrancyGuardUpgradeable
 {
+
+    function initialize() public initializer {
+        __Ownable_init();
+        __Pausable_init();
+        __ReentrancyGuard_init();
+    }
+
     /**
      * votes is a 2d array. first index is the index of the round address in the second param.
      */
