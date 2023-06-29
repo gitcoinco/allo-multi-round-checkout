@@ -72,15 +72,44 @@ contract MrcTest is Test {
         vm.deal(address(this), 10 ether);
 
         address[] memory roundsWrongLength = new address[](2);
-        rounds[0] = address(round1);
-        rounds[1] = address(round2);
+        roundsWrongLength[0] = address(round1);
+        roundsWrongLength[1] = address(round2);
 
         uint256 totalValue = 0;
         for (uint i = 0; i < values.length; i++) {
             totalValue += values[i];
         }
 
+        vm.expectRevert(VotesNotEqualRoundsLength.selector);
         mrc.vote{value: totalValue}(votes, roundsWrongLength, values);
+    }
+
+    function testValuesLengthCheck() public {
+        vm.deal(address(this), 10 ether);
+
+        uint256[] memory wrongValues = new uint256[](2);
+        wrongValues[0] = 1;
+        wrongValues[1] = 2;
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < wrongValues.length; i++) {
+            totalValue += wrongValues[i];
+        }
+
+        vm.expectRevert(ValuesNotEqualRoundsLength.selector);
+        mrc.vote{value: totalValue}(votes, rounds, wrongValues);
+    }
+
+    function testExcessValueSent() public {
+        vm.deal(address(this), 10 ether);
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < values.length; i++) {
+            totalValue += values[i];
+        }
+
+        vm.expectRevert(ExcessValueSent.selector);
+        mrc.vote{value: totalValue + 1}(votes, rounds, values);
     }
 }
 
