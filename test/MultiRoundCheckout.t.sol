@@ -9,24 +9,19 @@ contract MrcTest is Test {
     MockRoundImplementation private round1;
     MockRoundImplementation private round2;
     MockRoundImplementation private round3;
+    address[] public rounds = new address[](3);
+    bytes[][] public votes = new bytes[][](3);
+    uint256[] public values = new uint256[](3);
 
     function setUp() public {
         round1 = new MockRoundImplementation();
         round2 = new MockRoundImplementation();
         round3 = new MockRoundImplementation();
         mrc = new MultiRoundCheckout();
-    }
 
-    function testVotesPassing() public {
-        console.log(address(this));
-        vm.deal(address(this), 10 ether);
-
-        address[] memory rounds = new address[](3);
         rounds[0] = address(round1);
         rounds[1] = address(round2);
         rounds[2] = address(round3);
-
-        bytes[][] memory votes = new bytes[][](3);
 
         votes[0] = new bytes[](3);
         votes[0][0] = "A";
@@ -43,11 +38,13 @@ contract MrcTest is Test {
         votes[2][1] = "Q";
         votes[2][2] = "R";
 
-        uint256[] memory values = new uint256[](3);
         values[0] = 1;
         values[1] = 2;
         values[2] = 3;
+    }
 
+    function testVotesPassing() public {
+        vm.deal(address(this), 10 ether);
 
         uint256 totalValue = 0;
         for (uint i = 0; i < values.length; i++) {
@@ -58,7 +55,8 @@ contract MrcTest is Test {
 
         /* Assert that votes were passed on correctly */
         for (uint i = 0; i < rounds.length; i++) {
-            bytes[] memory receivedVotes = MockRoundImplementation(rounds[i]).getReceivedVotes();
+            bytes[] memory receivedVotes = MockRoundImplementation(rounds[i])
+                .getReceivedVotes();
             for (uint j = 0; j < receivedVotes.length; j++) {
                 assertEq(receivedVotes[j], votes[i][j]);
             }
@@ -68,6 +66,21 @@ contract MrcTest is Test {
         for (uint i = 0; i < rounds.length; i++) {
             assertEq(address(rounds[i]).balance, values[i]);
         }
+    }
+
+    function testVotesLengthCheck() public {
+        vm.deal(address(this), 10 ether);
+
+        address[] memory roundsWrongLength = new address[](2);
+        rounds[0] = address(round1);
+        rounds[1] = address(round2);
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < values.length; i++) {
+            totalValue += values[i];
+        }
+
+        mrc.vote{value: totalValue}(votes, roundsWrongLength, values);
     }
 }
 
