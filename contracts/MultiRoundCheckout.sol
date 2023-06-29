@@ -15,7 +15,6 @@ contract MultiRoundCheckout is
     PausableUpgradeable,
     ReentrancyGuardUpgradeable
 {
-
     function initialize() public initializer {
         __Ownable_init();
         __Pausable_init();
