@@ -5,7 +5,6 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "./IVotable.sol";
-import "forge-std/console.sol";
 
 error VotesNotEqualRoundsLength();
 error ValuesNotEqualRoundsLength();
@@ -38,7 +37,7 @@ contract MultiRoundCheckout is
         bytes[][] memory votes,
         address[] memory rounds,
         uint256[] memory values
-    ) public payable nonReentrant {
+    ) public payable nonReentrant whenNotPaused {
         if (votes.length != rounds.length) {
             revert VotesNotEqualRoundsLength();
         }
