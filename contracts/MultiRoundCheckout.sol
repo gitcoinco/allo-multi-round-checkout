@@ -7,8 +7,8 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "./IVotable.sol";
 
 error VotesNotEqualRoundsLength();
-error ValuesNotEqualRoundsLength();
-error ExcessValueSent();
+error AmountsNotEqualRoundsLength();
+error ExcessAmountSent();
 
 contract MultiRoundCheckout is
     OwnableUpgradeable,
@@ -35,23 +35,23 @@ contract MultiRoundCheckout is
     function vote(
         bytes[][] memory votes,
         address[] memory rounds,
-        uint256[] memory values
+        uint256[] memory amounts
     ) public payable nonReentrant whenNotPaused {
         if (votes.length != rounds.length) {
             revert VotesNotEqualRoundsLength();
         }
 
-        if (values.length != rounds.length) {
-            revert ValuesNotEqualRoundsLength();
+        if (amounts.length != rounds.length) {
+            revert AmountsNotEqualRoundsLength();
         }
 
         for (uint i = 0; i < rounds.length; i++) {
             IVotable round = IVotable(payable(rounds[i]));
-            round.vote{value: values[i]}(votes[i]);
+            round.vote{value: amounts[i]}(votes[i]);
         }
 
         if (address(this).balance != 0) {
-            revert ExcessValueSent();
+            revert ExcessAmountSent();
         }
     }
 }

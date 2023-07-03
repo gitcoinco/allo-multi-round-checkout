@@ -15,10 +15,10 @@ contract MockRoundImplementation is IVotable {
         if (tryReentrancy)  {
             address[] memory rounds = new address[](1);
             bytes[][] memory votes = new bytes[][](1);
-            uint256[] memory values = new uint256[](1);
+            uint256[] memory amounts = new uint256[](1);
             rounds[0] = address(this);
-            values[0] = msg.value;
-            MultiRoundCheckout(msg.sender).vote{value: msg.value}(votes, rounds, values);
+            amounts[0] = msg.value;
+            MultiRoundCheckout(msg.sender).vote{value: msg.value}(votes, rounds, amounts);
         }
         receivedVotes = data;
     }    

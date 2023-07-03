@@ -12,7 +12,7 @@ contract MrcTest is Test {
     MockRoundImplementation private round3;
     address[] public rounds = new address[](3);
     bytes[][] public votes = new bytes[][](3);
-    uint256[] public values = new uint256[](3);
+    uint256[] public amounts = new uint256[](3);
 
     function setUp() public {
         round1 = new MockRoundImplementation();
@@ -40,9 +40,9 @@ contract MrcTest is Test {
         votes[2][1] = "Q";
         votes[2][2] = "R";
 
-        values[0] = 1;
-        values[1] = 2;
-        values[2] = 3;
+        amounts[0] = 1;
+        amounts[1] = 2;
+        amounts[2] = 3;
     }
 
     function testNonReentrant() public {
@@ -50,7 +50,7 @@ contract MrcTest is Test {
         MockRoundImplementation(rounds[0]).setReentrant(true);
 
         vm.expectRevert(bytes("ReentrancyGuard: reentrant call"));
-        mrc.vote{value: 6}(votes, rounds, values);
+        mrc.vote{value: 6}(votes, rounds, amounts);
         MockRoundImplementation(rounds[0]).setReentrant(false);
     }
 
@@ -70,12 +70,12 @@ contract MrcTest is Test {
         vm.deal(address(this), 10 ether);
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < values.length; i++) {
-            totalValue += values[i];
+        for (uint i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
         }
 
         vm.expectRevert(bytes("Pausable: paused"));
-        mrc.vote{value: totalValue}(votes, rounds, values);
+        mrc.vote{value: totalValue}(votes, rounds, amounts);
     }
 
     function testUnpauseOnlyOwner() public {
@@ -88,11 +88,11 @@ contract MrcTest is Test {
         vm.deal(address(this), 10 ether);
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < values.length; i++) {
-            totalValue += values[i];
+        for (uint i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
         }
 
-        mrc.vote{value: totalValue}(votes, rounds, values);
+        mrc.vote{value: totalValue}(votes, rounds, amounts);
 
         /* Assert that votes were passed on correctly */
         for (uint i = 0; i < rounds.length; i++) {
@@ -103,9 +103,9 @@ contract MrcTest is Test {
             }
         }
 
-        /* Assert that values were sent along correctly */
+        /* Assert that amounts were sent along correctly */
         for (uint i = 0; i < rounds.length; i++) {
-            assertEq(address(rounds[i]).balance, values[i]);
+            assertEq(address(rounds[i]).balance, amounts[i]);
         }
     }
 
@@ -117,40 +117,40 @@ contract MrcTest is Test {
         roundsWrongLength[1] = address(round2);
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < values.length; i++) {
-            totalValue += values[i];
+        for (uint i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
         }
 
         vm.expectRevert(VotesNotEqualRoundsLength.selector);
-        mrc.vote{value: totalValue}(votes, roundsWrongLength, values);
+        mrc.vote{value: totalValue}(votes, roundsWrongLength, amounts);
     }
 
-    function testValuesLengthCheck() public {
+    function testAmountsLengthCheck() public {
         vm.deal(address(this), 10 ether);
 
-        uint256[] memory wrongValues = new uint256[](2);
-        wrongValues[0] = 1;
-        wrongValues[1] = 2;
+        uint256[] memory wrongAmounts = new uint256[](2);
+        wrongAmounts[0] = 1;
+        wrongAmounts[1] = 2;
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < wrongValues.length; i++) {
-            totalValue += wrongValues[i];
+        for (uint i = 0; i < wrongAmounts.length; i++) {
+            totalValue += wrongAmounts[i];
         }
 
-        vm.expectRevert(ValuesNotEqualRoundsLength.selector);
-        mrc.vote{value: totalValue}(votes, rounds, wrongValues);
+        vm.expectRevert(AmountsNotEqualRoundsLength.selector);
+        mrc.vote{value: totalValue}(votes, rounds, wrongAmounts);
     }
 
-    function testExcessValueSent() public {
+    function testExcessAmountSent() public {
         vm.deal(address(this), 10 ether);
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < values.length; i++) {
-            totalValue += values[i];
+        for (uint i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
         }
 
-        vm.expectRevert(ExcessValueSent.selector);
-        mrc.vote{value: totalValue + 1}(votes, rounds, values);
+        vm.expectRevert(ExcessAmountSent.selector);
+        mrc.vote{value: totalValue + 1}(votes, rounds, amounts);
     }
 }
 
