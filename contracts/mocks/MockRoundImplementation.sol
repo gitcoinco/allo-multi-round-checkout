@@ -17,6 +17,7 @@ contract MockRoundImplementation is IVotable {
             bytes[][] memory votes = new bytes[][](1);
             uint256[] memory amounts = new uint256[](1);
             rounds[0] = address(this);
+            votes[0] = data;
             amounts[0] = msg.value;
             MultiRoundCheckout(msg.sender).vote{value: msg.value}(votes, rounds, amounts);
         }
