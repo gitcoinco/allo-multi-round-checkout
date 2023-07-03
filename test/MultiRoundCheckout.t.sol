@@ -3,14 +3,13 @@ pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
 import "../contracts/MultiRoundCheckout.sol";
-import "../contracts/MaliciousRound.sol";
+import "../contracts/mocks/MockRoundImplementation.sol";
 
 contract MrcTest is Test {
     MultiRoundCheckout private mrc;
     MockRoundImplementation private round1;
     MockRoundImplementation private round2;
     MockRoundImplementation private round3;
-    MaliciousRound private maliciousRound;
     address[] public rounds = new address[](3);
     bytes[][] public votes = new bytes[][](3);
     uint256[] public values = new uint256[](3);
@@ -21,7 +20,6 @@ contract MrcTest is Test {
         round3 = new MockRoundImplementation();
         mrc = new MultiRoundCheckout();
         mrc.initialize();
-        maliciousRound = new MaliciousRound(address(mrc));
 
         rounds[0] = address(round1);
         rounds[1] = address(round2);
@@ -49,10 +47,11 @@ contract MrcTest is Test {
 
     function testNonReentrant() public {
         vm.deal(address(this), 10);
-        rounds[0] = address(maliciousRound);
+        MockRoundImplementation(rounds[0]).setReentrant(true);
 
         vm.expectRevert(bytes("ReentrancyGuard: reentrant call"));
         mrc.vote{value: 6}(votes, rounds, values);
+        MockRoundImplementation(rounds[0]).setReentrant(false);
     }
 
     function testOwnership() public {
@@ -155,14 +154,3 @@ contract MrcTest is Test {
     }
 }
 
-contract MockRoundImplementation is IVotable {
-    bytes[] public receivedVotes;
-
-    function vote(bytes[] memory data) external payable {
-        receivedVotes = data;
-    }
-
-    function getReceivedVotes() public view returns (bytes[] memory) {
-        return receivedVotes;
-    }
-}
