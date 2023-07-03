@@ -1,0 +1,156 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+import "forge-std/Test.sol";
+import "../contracts/MultiRoundCheckout.sol";
+import "../contracts/mocks/MockRoundImplementation.sol";
+
+contract MrcTest is Test {
+    MultiRoundCheckout private mrc;
+    MockRoundImplementation private round1;
+    MockRoundImplementation private round2;
+    MockRoundImplementation private round3;
+    address[] public rounds = new address[](3);
+    bytes[][] public votes = new bytes[][](3);
+    uint256[] public amounts = new uint256[](3);
+
+    function setUp() public {
+        round1 = new MockRoundImplementation();
+        round2 = new MockRoundImplementation();
+        round3 = new MockRoundImplementation();
+        mrc = new MultiRoundCheckout();
+        mrc.initialize();
+
+        rounds[0] = address(round1);
+        rounds[1] = address(round2);
+        rounds[2] = address(round3);
+
+        votes[0] = new bytes[](3);
+        votes[0][0] = "A";
+        votes[0][1] = "B";
+        votes[0][2] = "C";
+
+        votes[1] = new bytes[](3);
+        votes[1][0] = "X";
+        votes[1][1] = "Y";
+        votes[1][2] = "Z";
+
+        votes[2] = new bytes[](3);
+        votes[2][0] = "P";
+        votes[2][1] = "Q";
+        votes[2][2] = "R";
+
+        amounts[0] = 1;
+        amounts[1] = 2;
+        amounts[2] = 3;
+    }
+
+    function testNonReentrant() public {
+        vm.deal(address(this), 10);
+        MockRoundImplementation(rounds[0]).setReentrant(true);
+
+        vm.expectRevert(bytes("ReentrancyGuard: reentrant call"));
+        mrc.vote{value: 6}(votes, rounds, amounts);
+        MockRoundImplementation(rounds[0]).setReentrant(false);
+    }
+
+    function testOwnership() public {
+        assertEq(mrc.owner(), address(this));
+    }
+
+    function testPauseOnlyOwner() public {
+        vm.prank(address(0x0));
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        mrc.pause();
+    }
+
+    function testPauseVoteRevert() public {
+        mrc.pause();
+
+        vm.deal(address(this), 10 ether);
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
+        }
+
+        vm.expectRevert(bytes("Pausable: paused"));
+        mrc.vote{value: totalValue}(votes, rounds, amounts);
+    }
+
+    function testUnpauseOnlyOwner() public {
+        vm.prank(address(0x0));
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        mrc.unpause();
+    }
+
+    function testVotesPassing() public {
+        vm.deal(address(this), 10 ether);
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
+        }
+
+        mrc.vote{value: totalValue}(votes, rounds, amounts);
+
+        /* Assert that votes were passed on correctly */
+        for (uint i = 0; i < rounds.length; i++) {
+            bytes[] memory receivedVotes = MockRoundImplementation(rounds[i])
+                .getReceivedVotes();
+            for (uint j = 0; j < receivedVotes.length; j++) {
+                assertEq(receivedVotes[j], votes[i][j]);
+            }
+        }
+
+        /* Assert that amounts were sent along correctly */
+        for (uint i = 0; i < rounds.length; i++) {
+            assertEq(address(rounds[i]).balance, amounts[i]);
+        }
+    }
+
+    function testVotesLengthCheck() public {
+        vm.deal(address(this), 10 ether);
+
+        address[] memory roundsWrongLength = new address[](2);
+        roundsWrongLength[0] = address(round1);
+        roundsWrongLength[1] = address(round2);
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
+        }
+
+        vm.expectRevert(VotesNotEqualRoundsLength.selector);
+        mrc.vote{value: totalValue}(votes, roundsWrongLength, amounts);
+    }
+
+    function testAmountsLengthCheck() public {
+        vm.deal(address(this), 10 ether);
+
+        uint256[] memory wrongAmounts = new uint256[](2);
+        wrongAmounts[0] = 1;
+        wrongAmounts[1] = 2;
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < wrongAmounts.length; i++) {
+            totalValue += wrongAmounts[i];
+        }
+
+        vm.expectRevert(AmountsNotEqualRoundsLength.selector);
+        mrc.vote{value: totalValue}(votes, rounds, wrongAmounts);
+    }
+
+    function testExcessAmountSent() public {
+        vm.deal(address(this), 10 ether);
+
+        uint256 totalValue = 0;
+        for (uint i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
+        }
+
+        vm.expectRevert(ExcessAmountSent.selector);
+        mrc.vote{value: totalValue + 1}(votes, rounds, amounts);
+    }
+}
+
