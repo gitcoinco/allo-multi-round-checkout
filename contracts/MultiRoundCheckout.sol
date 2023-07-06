@@ -75,10 +75,6 @@ contract MultiRoundCheckout is
             revert VotesNotEqualRoundsLength();
         }
 
-        if (amounts.length != rounds.length) {
-            revert AmountsNotEqualRoundsLength();
-        }
-
         IERC20PermitUpgradeable(token).permit(
             msg.sender,
             address(this),
