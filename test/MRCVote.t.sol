@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 import "../contracts/MultiRoundCheckout.sol";
 import "../contracts/mocks/MockRoundImplementation.sol";
 
-contract MrcTest is Test {
+contract MrcTestVote is Test {
     MultiRoundCheckout private mrc;
     MockRoundImplementation private round1;
     MockRoundImplementation private round2;
