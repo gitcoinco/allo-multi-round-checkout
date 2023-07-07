@@ -65,6 +65,7 @@ contract MultiRoundCheckout is
     function voteERC20Permit(
         bytes[][] memory votes,
         address[] memory rounds,
+        uint256[] memory amounts,
         uint256 totalAmount,
         address token,
         uint8 v,
@@ -73,6 +74,10 @@ contract MultiRoundCheckout is
     ) public nonReentrant whenNotPaused {
         if (votes.length != rounds.length) {
             revert VotesNotEqualRoundsLength();
+        }
+
+        if (amounts.length != rounds.length) {
+            revert AmountsNotEqualRoundsLength();
         }
 
         IERC20PermitUpgradeable(token).permit(
@@ -88,9 +93,12 @@ contract MultiRoundCheckout is
         IERC20Upgradeable(token).transferFrom(msg.sender, address(this), totalAmount);
 
         for (uint i = 0; i < rounds.length; i++) {
-            IVotable round = IVotable(payable(rounds[i]));
+            IVotable round = IVotable(rounds[i]);
+            IERC20Upgradeable(token).approve(address(round.votingStrategy()), amounts[i]);
             round.vote(votes[i]);
         }
+
+        // ToDo: check if permit & approve works as expected
 
         if (IERC20Upgradeable(token).balanceOf(address(this)) != 0) {
             revert ExcessAmountSent();
