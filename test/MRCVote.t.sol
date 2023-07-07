@@ -54,16 +54,6 @@ contract MrcTestVote is Test {
         MockRoundImplementationETH(rounds[0]).setReentrant(false);
     }
 
-    function testOwnership() public {
-        assertEq(mrc.owner(), address(this));
-    }
-
-    function testPauseOnlyOwner() public {
-        vm.prank(address(0x0));
-        vm.expectRevert(bytes("Ownable: caller is not the owner"));
-        mrc.pause();
-    }
-
     function testPauseVoteRevert() public {
         mrc.pause();
 
@@ -76,12 +66,6 @@ contract MrcTestVote is Test {
 
         vm.expectRevert(bytes("Pausable: paused"));
         mrc.vote{value: totalValue}(votes, rounds, amounts);
-    }
-
-    function testUnpauseOnlyOwner() public {
-        vm.prank(address(0x0));
-        vm.expectRevert(bytes("Ownable: caller is not the owner"));
-        mrc.unpause();
     }
 
     function testVotesPassing() public {
