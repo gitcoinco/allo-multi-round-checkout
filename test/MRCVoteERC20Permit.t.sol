@@ -48,11 +48,10 @@ contract MrcTestVoteERC20Permit is Test {
 
         testERC20.mint(owner, 100);
 
-        votes[0] = new bytes[](1);
-        votes[1] = new bytes[](1);
-
-        votes[0].push(abi.encode(address(testERC20), 50));
-        votes[1].push(abi.encode(address(testERC20), 50));
+        votes[0].push(abi.encode(address(testERC20), 25));
+        votes[0].push(abi.encode(address(testERC20), 25));
+        votes[1].push(abi.encode(address(testERC20), 25));
+        votes[1].push(abi.encode(address(testERC20), 25));
 
     }
 
@@ -87,6 +86,8 @@ contract MrcTestVoteERC20Permit is Test {
         );
 
         assertEq(testERC20.allowance(owner, address(mrc)), 0);
+        assertEq(testERC20.balanceOf(owner), 0);
+        assertEq(testERC20.balanceOf(address(votingStrategy)), 100);
     }
 }
 
