@@ -3,7 +3,7 @@ pragma solidity ^0.8.17;
 
 import "../MultiRoundCheckout.sol";
 
-contract MockRoundImplementation is IVotable {
+contract MockRoundImplementationETH is IVotable {
     bytes[] public receivedVotes;
     bool public tryReentrancy;
 
@@ -11,7 +11,7 @@ contract MockRoundImplementation is IVotable {
         tryReentrancy = _tryReentrancy;
     }
 
-    function vote(bytes[] memory data) external payable {
+    function vote(bytes[] memory data) external override payable {
         if (tryReentrancy)  {
             address[] memory rounds = new address[](1);
             bytes[][] memory votes = new bytes[][](1);
