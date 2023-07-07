@@ -3,21 +3,21 @@ pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
 import "../contracts/MultiRoundCheckout.sol";
-import "../contracts/mocks/MockRoundImplementation.sol";
+import "../contracts/mocks/MockRoundImplementationETH.sol";
 
 contract MrcTestVote is Test {
     MultiRoundCheckout private mrc;
-    MockRoundImplementation private round1;
-    MockRoundImplementation private round2;
-    MockRoundImplementation private round3;
+    MockRoundImplementationETH private round1;
+    MockRoundImplementationETH private round2;
+    MockRoundImplementationETH private round3;
     address[] public rounds = new address[](3);
     bytes[][] public votes = new bytes[][](3);
     uint256[] public amounts = new uint256[](3);
 
     function setUp() public {
-        round1 = new MockRoundImplementation();
-        round2 = new MockRoundImplementation();
-        round3 = new MockRoundImplementation();
+        round1 = new MockRoundImplementationETH();
+        round2 = new MockRoundImplementationETH();
+        round3 = new MockRoundImplementationETH();
         mrc = new MultiRoundCheckout();
         mrc.initialize();
 
@@ -47,11 +47,11 @@ contract MrcTestVote is Test {
 
     function testNonReentrant() public {
         vm.deal(address(this), 10);
-        MockRoundImplementation(rounds[0]).setReentrant(true);
+        MockRoundImplementationETH(rounds[0]).setReentrant(true);
 
         vm.expectRevert(bytes("ReentrancyGuard: reentrant call"));
         mrc.vote{value: 6}(votes, rounds, amounts);
-        MockRoundImplementation(rounds[0]).setReentrant(false);
+        MockRoundImplementationETH(rounds[0]).setReentrant(false);
     }
 
     function testOwnership() public {
@@ -96,7 +96,7 @@ contract MrcTestVote is Test {
 
         /* Assert that votes were passed on correctly */
         for (uint i = 0; i < rounds.length; i++) {
-            bytes[] memory receivedVotes = MockRoundImplementation(rounds[i])
+            bytes[] memory receivedVotes = MockRoundImplementationETH(rounds[i])
                 .getReceivedVotes();
             for (uint j = 0; j < receivedVotes.length; j++) {
                 assertEq(receivedVotes[j], votes[i][j]);
