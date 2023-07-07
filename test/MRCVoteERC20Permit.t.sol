@@ -3,61 +3,57 @@ pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
 import "../contracts/MultiRoundCheckout.sol";
-import "../contracts/mocks/MockRoundImplementation.sol";
+import "../contracts/mocks/MockRoundImplementationERC20.sol";
 import "../contracts/mocks/MockERC20Permit.sol";
 import "../contracts/mocks/SigUtils.sol";
 
 contract MrcTestVoteERC20Permit is Test {
     MultiRoundCheckout private mrc;
     MockERC20Permit private testERC20;
-    MockRoundImplementation private round1;
-    MockRoundImplementation private round2;
-    MockRoundImplementation private round3;
+    MockRoundImplementationERC20 private round1;
+    MockRoundImplementationERC20 private round2;
+    MockVotingStrategy private votingStrategy;
     SigUtils private sigUtils;
-    address[] public rounds = new address[](3);
-    bytes[][] public votes = new bytes[][](3);
+    address[] public rounds = new address[](2);
+    bytes[][] public votes = new bytes[][](2);
+    uint256[] public amounts = new uint256[](2);
     uint256 public totalAmount;
+    address public project1;
+    address public project2;
     address public owner;
     address public token1;
     uint256 private ownerPrivateKey;
 
     function setUp() public {
-        round1 = new MockRoundImplementation();
-        round2 = new MockRoundImplementation();
-        round3 = new MockRoundImplementation();
+        votingStrategy = new MockVotingStrategy();
+        round1 = new MockRoundImplementationERC20(address(votingStrategy));
+        round2 = new MockRoundImplementationERC20(address(votingStrategy));
         mrc = new MultiRoundCheckout();
         testERC20 = new MockERC20Permit();
         sigUtils = new SigUtils(testERC20.DOMAIN_SEPARATOR());
         mrc.initialize();
         testERC20.initialize("Test", "TEST");
-
         rounds[0] = address(round1);
         rounds[1] = address(round2);
-        rounds[2] = address(round3);
 
-        votes[0] = new bytes[](3);
-        votes[0][0] = "A";
-        votes[0][1] = "B";
-        votes[0][2] = "C";
+        totalAmount = 100;
 
-        votes[1] = new bytes[](3);
-        votes[1][0] = "X";
-        votes[1][1] = "Y";
-        votes[1][2] = "Z";
-
-        votes[2] = new bytes[](3);
-        votes[2][0] = "P";
-        votes[2][1] = "Q";
-        votes[2][2] = "R";
-
-        totalAmount = 1e18;
+        amounts[0] = 50;
+        amounts[1] = 50;
 
         token1 = address(testERC20);
 
         ownerPrivateKey = 0xA11CE;
         owner = vm.addr(ownerPrivateKey);
 
-        testERC20.mint(owner, 1e18);
+        testERC20.mint(owner, 100);
+
+        votes[0] = new bytes[](1);
+        votes[1] = new bytes[](1);
+
+        votes[0].push(abi.encode(address(testERC20), 50));
+        votes[1].push(abi.encode(address(testERC20), 50));
+
     }
 
     function testPermit () public {
@@ -65,7 +61,7 @@ contract MrcTestVoteERC20Permit is Test {
         SigUtils.Permit memory permit = SigUtils.Permit({
             owner: owner,
             spender: address(mrc),
-            value: 1e18,
+            value: 100,
             nonce: 0,
             deadline: type(uint256).max
 
@@ -75,13 +71,14 @@ contract MrcTestVoteERC20Permit is Test {
 
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
 
-        assertEq(testERC20.balanceOf(owner), 1e18);
+        assertEq(testERC20.balanceOf(owner), 100);
         assertEq(testERC20.allowance(owner, address(mrc)), 0);
 
         vm.prank(owner);
         mrc.voteERC20Permit(
             votes,
             rounds,
+            amounts,
             totalAmount,
             token1,
             v,
@@ -89,7 +86,7 @@ contract MrcTestVoteERC20Permit is Test {
             s
         );
 
-        assertEq(testERC20.allowance(owner, address(mrc)), 1e18);
+        assertEq(testERC20.allowance(owner, address(mrc)), 0);
     }
 }
 
