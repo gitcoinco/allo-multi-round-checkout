@@ -52,6 +52,8 @@ async function voteWithMultiRoundCheckoutContract() {
   );
 
   const contract = await deploy("MultiRoundCheckout");
+
+  // TODO: when the fork setup is done, use the actual rounds instead of the mocks
   const round1 = await deploy("MockRoundImplementation");
   const round2 = await deploy("MockRoundImplementation");
   const round3 = await deploy("MockRoundImplementation");
