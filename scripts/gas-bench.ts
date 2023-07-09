@@ -80,7 +80,7 @@ async function voteWithMultiRoundCheckoutContract() {
 }
 
 async function main() {
-  // Execute the following axctions in fork from a block within the Beta rounds voting period.
+  // Execute the following actions in fork from a block within the Beta rounds voting period.
 
   // await voteWithBetaRoundsContracts();
   await voteWithMultiRoundCheckoutContract();
