@@ -11,7 +11,6 @@ import "./IVotable.sol";
 error VotesNotEqualRoundsLength();
 error AmountsNotEqualRoundsLength();
 error ExcessAmountSent();
-error PermitFailed(string reason);
 
 contract MultiRoundCheckout is
     OwnableUpgradeable,
@@ -91,11 +90,11 @@ contract MultiRoundCheckout is
             s
         ) {} catch Error (string memory reason) {
             if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
-                revert PermitFailed(reason);
+                revert(reason);
             }
-        } catch (bytes memory lowLevelData) {
+        } catch (bytes memory reason) {
             if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
-               revert PermitFailed(string(lowLevelData));
+               revert(string(reason));
             }
         }
 

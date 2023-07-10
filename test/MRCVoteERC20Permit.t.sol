@@ -255,7 +255,7 @@ contract MrcTestVoteERC20Permit is Test {
 
         (uint8 v3, bytes32 r3, bytes32 s3) = vm.sign(ownerPrivateKey, digest3);
 
-        vm.expectRevert();
+        vm.expectRevert("ERC20Permit: invalid signature");
         vm.prank(owner);
         mrc.voteERC20Permit(
             votes,
