@@ -206,5 +206,68 @@ contract MrcTestVoteERC20Permit is Test {
         );
     }
 
+    function testPermitAlreadyExistsAndVoteERC20PermitDoesNotRevert() public {
+        vm.prank(owner);
+        MockERC20Permit(address(testERC20)).permit(owner, address(mrc), 100, type(uint256).max, v, r, s);
+
+        // invalid permit with wrong value and nonce
+        SigUtils.Permit memory permit3 = SigUtils.Permit({
+            owner: owner,
+            spender: address(mrc),
+            value: 10,
+            nonce: 5,
+            deadline: type(uint256).max
+
+        });
+
+        bytes32 digest3 = sigUtils.getTypedDataHash(permit3);
+
+        (uint8 v3, bytes32 r3, bytes32 s3) = vm.sign(ownerPrivateKey, digest3);
+
+        vm.prank(owner);
+        mrc.voteERC20Permit(
+            votes,
+            rounds,
+            amounts,
+            totalAmount,
+            token1,
+            v3,
+            r3,
+            s3
+        );
+
+        assertEq(testERC20.balanceOf(owner), 0);
+        assertEq(testERC20.balanceOf(address(votingStrategy)), 100);
+    }
+
+    function testPermitDoesNotExistAndVoteERC20PermitReverts() public {
+        // invalid permit with wrong nonce
+        SigUtils.Permit memory permit3 = SigUtils.Permit({
+            owner: owner,
+            spender: address(mrc),
+            value: 100,
+            nonce: 5,
+            deadline: type(uint256).max
+
+        });
+
+        bytes32 digest3 = sigUtils.getTypedDataHash(permit3);
+
+        (uint8 v3, bytes32 r3, bytes32 s3) = vm.sign(ownerPrivateKey, digest3);
+
+        vm.expectRevert();
+        vm.prank(owner);
+        mrc.voteERC20Permit(
+            votes,
+            rounds,
+            amounts,
+            totalAmount,
+            token1,
+            v3,
+            r3,
+            s3
+        );
+    }
+
 }
 
