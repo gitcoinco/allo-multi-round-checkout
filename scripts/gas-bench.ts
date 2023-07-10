@@ -2,18 +2,7 @@ import { ethers } from "hardhat";
 import { ContractTransactionResponse } from "ethers";
 
 // pretty number
-const pn = (n: bigint) =>
-  n
-    .toString()
-    .split("")
-    .reverse()
-    .join("")
-    .split(/(\d{3})/)
-    .filter((s) => s.length > 0)
-    .join("_")
-    .split("")
-    .reverse()
-    .join("");
+const pn = (n: bigint) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "_");
 
 const gasBench = async (
   msg: string,
@@ -52,6 +41,7 @@ async function voteWithMultiRoundCheckoutContract() {
   );
 
   const contract = await deploy("MultiRoundCheckout");
+  // TODO: when the fork setup is done, use the actual rounds instead of the mocks
   const round1 = await deploy("MockRoundImplementation");
   const round2 = await deploy("MockRoundImplementation");
   const round3 = await deploy("MockRoundImplementation");
@@ -78,7 +68,7 @@ async function voteWithMultiRoundCheckoutContract() {
 }
 
 async function main() {
-  // Execute the following axctions in fork from a block within the Beta rounds voting period.
+  // Execute the following actions in fork from a block within the Beta rounds voting period.
 
   // await voteWithBetaRoundsContracts();
   await voteWithMultiRoundCheckoutContract();
