@@ -85,17 +85,18 @@ contract MultiRoundCheckout is
             msg.sender,
             address(this),
             totalAmount,
-            0,
+            type(uint256).max,
             v,
             r,
             s
         ) {} catch Error (string memory reason) {
             if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
                 revert PermitFailed(reason);
-
             }
-        } catch {
-            revert PermitFailed("Permit failed: unknown reason");
+        } catch (bytes memory lowLevelData) {
+            if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
+               revert PermitFailed(string(lowLevelData));
+            }
         }
 
         IERC20Upgradeable(token).transferFrom(msg.sender, address(this), totalAmount);
