@@ -2,18 +2,7 @@ import { ethers } from "hardhat";
 import { ContractTransactionResponse } from "ethers";
 
 // pretty number
-const pn = (n: bigint) =>
-  n
-    .toString()
-    .split("")
-    .reverse()
-    .join("")
-    .split(/(\d{3})/)
-    .filter((s) => s.length > 0)
-    .join("_")
-    .split("")
-    .reverse()
-    .join("");
+const pn = (n: bigint) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "_");
 
 const gasBench = async (
   msg: string,
