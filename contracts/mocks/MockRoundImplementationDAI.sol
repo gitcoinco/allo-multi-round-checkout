@@ -23,6 +23,7 @@ contract MockRoundImplementationDAI is IVotable {
             uint256[] memory amounts = new uint256[](1);
             uint256 totalAmount = msg.value;
             address token = address(this);
+            uint256 nonce = 0;
             uint8 v = 0;
             bytes32 r = 0;
             bytes32 s = 0;
