@@ -6,7 +6,7 @@ import "../contracts/MultiRoundCheckout.sol";
 import "../contracts/mocks/MockRoundImplementationDAI.sol";
 import "../contracts/mocks/MockVotingStrategy.sol";
 import "../contracts/mocks/MockDAIPermit.sol";
-import "../contracts/mocks/SigUtils.sol";
+import "../contracts/mocks/SigUtilsDAI.sol";
 
 contract MrcTestVoteDAIPermit is Test {
     MultiRoundCheckout private mrc;
@@ -15,8 +15,8 @@ contract MrcTestVoteDAIPermit is Test {
     MockRoundImplementationDAI private round2;
     MockRoundImplementationDAI private round3;
     MockVotingStrategy private votingStrategy;
-    SigUtils private sigUtils;
-    SigUtils.Permit private permit;
+    SigUtilsDAI private sigUtilsDAI;
+    SigUtilsDAI.Permit private permit;
     bytes32 private digest;
     uint8 private v;
     bytes32 private r;
@@ -31,6 +31,7 @@ contract MrcTestVoteDAIPermit is Test {
     address public token1;
     uint256 private ownerPrivateKey;
     uint256 private chainId;
+    uint256 private nonce;
 
     function setUp() public {
         votingStrategy = new MockVotingStrategy();
@@ -39,9 +40,10 @@ contract MrcTestVoteDAIPermit is Test {
         round3 = new MockRoundImplementationDAI(address(votingStrategy));
         mrc = new MultiRoundCheckout();
         chainId = 1;
+        nonce = 0;
         testDAI = new MockDAIPermit(chainId);
 
-        sigUtils = new SigUtils(testDAI.DOMAIN_SEPARATOR());
+        sigUtilsDAI = new SigUtilsDAI(testDAI.DOMAIN_SEPARATOR());
 
         mrc.initialize();
         rounds[0] = address(round1);
@@ -64,16 +66,15 @@ contract MrcTestVoteDAIPermit is Test {
         votes[1].push(abi.encode(address(testDAI), 25));
         votes[1].push(abi.encode(address(testDAI), 25));
         
-        permit = SigUtils.Permit({
-            owner: owner,
+        permit = SigUtilsDAI.Permit({
+            holder: owner,
             spender: address(mrc),
-            value: 100,
-            nonce: 0,
-            deadline: type(uint256).max
-
+            nonce: nonce,
+            expiry: type(uint256).max,
+            allowed: true
         });
 
-        digest = sigUtils.getTypedDataHash(permit);
+        digest = sigUtilsDAI.getTypedDataHash(permit);
 
         (v, r, s) = vm.sign(ownerPrivateKey, digest);
 
@@ -84,18 +85,18 @@ contract MrcTestVoteDAIPermit is Test {
         assertEq(testDAI.allowance(owner, address(mrc)), 0);
 
         vm.prank(owner);
-        mrc.voteERC20Permit(
+        mrc.voteDAIPermit(
             votes,
             rounds,
             amounts,
             totalAmount,
             token1,
+            nonce,
             v,
             r,
             s
         );
 
-        assertEq(testDAI.allowance(owner, address(mrc)), 0);
         assertEq(testDAI.balanceOf(owner), 0);
         assertEq(testDAI.balanceOf(address(votingStrategy)), 100);
     }
@@ -105,12 +106,13 @@ contract MrcTestVoteDAIPermit is Test {
 
         vm.expectRevert(bytes("ReentrancyGuard: reentrant call"));
         vm.prank(owner);
-        mrc.voteERC20Permit(
+        mrc.voteDAIPermit(
             votes,
             rounds,
             amounts,
             totalAmount,
             token1,
+            nonce,
             v,
             r,
             s
@@ -123,12 +125,13 @@ contract MrcTestVoteDAIPermit is Test {
 
         vm.expectRevert(bytes("Pausable: paused"));
         vm.prank(owner);
-        mrc.voteERC20Permit(
+        mrc.voteDAIPermit(
             votes,
             rounds,
             amounts,
             totalAmount,
             token1,
+            nonce,
             v,
             r,
             s
@@ -142,12 +145,13 @@ contract MrcTestVoteDAIPermit is Test {
         roundsWrongLength[2] = address(round3);
 
         vm.expectRevert(VotesNotEqualRoundsLength.selector);
-         mrc.voteERC20Permit(
+        mrc.voteDAIPermit(
             votes,
             roundsWrongLength,
             amounts,
             totalAmount,
             token1,
+            nonce,
             v,
             r,
             s
@@ -161,12 +165,13 @@ contract MrcTestVoteDAIPermit is Test {
         wrongAmounts[2] = 3;
 
         vm.expectRevert(AmountsNotEqualRoundsLength.selector);
-         mrc.voteERC20Permit(
+        mrc.voteDAIPermit(
             votes,
             rounds,
             wrongAmounts,
             totalAmount,
             token1,
+            nonce,
             v,
             r,
             s
@@ -180,58 +185,58 @@ contract MrcTestVoteDAIPermit is Test {
 
         testDAI.mint(owner2, 110);
 
-        SigUtils.Permit memory permit2 = SigUtils.Permit({
-            owner: owner2,
+        SigUtilsDAI.Permit memory permit2 = SigUtilsDAI.Permit({
+            holder: owner2,
             spender: address(mrc),
-            value: 110,
-            nonce: 0,
-            deadline: type(uint256).max
-
+            nonce: nonce,
+            expiry: type(uint256).max,
+            allowed: true
         });
 
-        bytes32 digest2 = sigUtils.getTypedDataHash(permit2);
+        bytes32 digest2 = sigUtilsDAI.getTypedDataHash(permit2);
 
         (uint8 v2, bytes32 r2, bytes32 s2) = vm.sign(ownerPrivateKey2, digest2);
 
         vm.prank(owner2);
         vm.expectRevert(ExcessAmountSent.selector);
-        mrc.voteERC20Permit(
+        mrc.voteDAIPermit(
             votes,
             rounds,
             amounts,
             totalAmount2,
             token1,
+            nonce,
             v2,
             r2,
             s2
         );
     }
 
-    function testPermitAlreadyExistsAndVoteERC20PermitDoesNotRevert() public {
+    function testPermitAlreadyExistsAndVoteDAIPermitDoesNotRevert() public {
         vm.prank(owner);
-        MockERC20Permit(address(testDAI)).permit(owner, address(mrc), 100, type(uint256).max, v, r, s);
+        MockDAIPermit(address(testDAI)).permit(owner, address(mrc), nonce, type(uint256).max, true, v, r, s);
 
-        // invalid permit with wrong value and nonce
-        SigUtils.Permit memory permit3 = SigUtils.Permit({
-            owner: owner,
+        // invalid permit with wrong nonce
+        SigUtilsDAI.Permit memory permit3 = SigUtilsDAI.Permit({
+            holder: owner,
             spender: address(mrc),
-            value: 10,
             nonce: 5,
-            deadline: type(uint256).max
-
+            expiry: type(uint256).max,
+            allowed: true
         });
 
-        bytes32 digest3 = sigUtils.getTypedDataHash(permit3);
+        bytes32 digest3 = sigUtilsDAI.getTypedDataHash(permit3);
 
         (uint8 v3, bytes32 r3, bytes32 s3) = vm.sign(ownerPrivateKey, digest3);
 
         vm.prank(owner);
-        mrc.voteERC20Permit(
+        mrc.voteDAIPermit(
             votes,
             rounds,
             amounts,
             totalAmount,
             token1,
+            nonce,
             v3,
             r3,
             s3
@@ -241,29 +246,29 @@ contract MrcTestVoteDAIPermit is Test {
         assertEq(testDAI.balanceOf(address(votingStrategy)), 100);
     }
 
-    function testPermitDoesNotExistAndVoteERC20PermitReverts() public {
+    function testPermitDoesNotExistAndVoteDAIPermitReverts() public {
         // invalid permit with wrong nonce
-        SigUtils.Permit memory permit3 = SigUtils.Permit({
-            owner: owner,
+        SigUtilsDAI.Permit memory permit3 = SigUtilsDAI.Permit({
+            holder: owner,
             spender: address(mrc),
-            value: 100,
             nonce: 5,
-            deadline: type(uint256).max
-
+            expiry: type(uint256).max,
+            allowed: true
         });
 
-        bytes32 digest3 = sigUtils.getTypedDataHash(permit3);
+        bytes32 digest3 = sigUtilsDAI.getTypedDataHash(permit3);
 
         (uint8 v3, bytes32 r3, bytes32 s3) = vm.sign(ownerPrivateKey, digest3);
 
-        vm.expectRevert("ERC20Permit: invalid signature");
+        vm.expectRevert("Dai/invalid-permit");
         vm.prank(owner);
-        mrc.voteERC20Permit(
+         mrc.voteDAIPermit(
             votes,
             rounds,
             amounts,
             totalAmount,
             token1,
+            nonce,
             v3,
             r3,
             s3
