@@ -4,7 +4,7 @@
 
 pragma solidity ^0.8.17;
 
-contract MockDAIPermit {
+contract TestDAI {
     // --- Auth ---
     mapping (address => uint) public wards;
     function rely(address guy) external auth { wards[guy] = 1; }

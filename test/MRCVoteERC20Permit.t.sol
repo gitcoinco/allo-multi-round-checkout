@@ -5,12 +5,12 @@ import "forge-std/Test.sol";
 import "../contracts/MultiRoundCheckout.sol";
 import "../contracts/mocks/MockRoundImplementationERC20.sol";
 import "../contracts/mocks/MockVotingStrategy.sol";
-import "../contracts/mocks/MockERC20Permit.sol";
-import "../contracts/mocks/SigUtils.sol";
+import "../contracts/tokens/TestERC20.sol";
+import "../contracts/utils/SigUtils.sol";
 
 contract MrcTestVoteERC20Permit is Test {
     MultiRoundCheckout private mrc;
-    MockERC20Permit private testERC20;
+    TestERC20 private testERC20;
     MockRoundImplementationERC20 private round1;
     MockRoundImplementationERC20 private round2;
     MockRoundImplementationERC20 private round3;
@@ -37,7 +37,7 @@ contract MrcTestVoteERC20Permit is Test {
         round2 = new MockRoundImplementationERC20(address(votingStrategy));
         round3 = new MockRoundImplementationERC20(address(votingStrategy));
         mrc = new MultiRoundCheckout();
-        testERC20 = new MockERC20Permit();
+        testERC20 = new TestERC20();
 
         sigUtils = new SigUtils(testERC20.DOMAIN_SEPARATOR());
 
@@ -208,7 +208,7 @@ contract MrcTestVoteERC20Permit is Test {
 
     function testPermitAlreadyExistsAndVoteERC20PermitDoesNotRevert() public {
         vm.prank(owner);
-        MockERC20Permit(address(testERC20)).permit(owner, address(mrc), 100, type(uint256).max, v, r, s);
+        TestERC20(address(testERC20)).permit(owner, address(mrc), 100, type(uint256).max, v, r, s);
 
         // invalid permit with wrong value and nonce
         SigUtils.Permit memory permit3 = SigUtils.Permit({

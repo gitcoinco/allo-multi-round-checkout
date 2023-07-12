@@ -5,12 +5,12 @@ import "forge-std/Test.sol";
 import "../contracts/MultiRoundCheckout.sol";
 import "../contracts/mocks/MockRoundImplementationDAI.sol";
 import "../contracts/mocks/MockVotingStrategy.sol";
-import "../contracts/mocks/MockDAIPermit.sol";
-import "../contracts/mocks/SigUtilsDAI.sol";
+import "../contracts/tokens/TestDAI.sol";
+import "../contracts/utils/SigUtilsDAI.sol";
 
 contract MrcTestVoteDAIPermit is Test {
     MultiRoundCheckout private mrc;
-    MockDAIPermit private testDAI;
+    TestDAI private testDAI;
     MockRoundImplementationDAI private round1;
     MockRoundImplementationDAI private round2;
     MockRoundImplementationDAI private round3;
@@ -41,7 +41,7 @@ contract MrcTestVoteDAIPermit is Test {
         mrc = new MultiRoundCheckout();
         chainId = 1;
         nonce = 0;
-        testDAI = new MockDAIPermit(chainId);
+        testDAI = new TestDAI(chainId);
 
         sigUtilsDAI = new SigUtilsDAI(testDAI.DOMAIN_SEPARATOR());
 
@@ -214,7 +214,7 @@ contract MrcTestVoteDAIPermit is Test {
 
     function testPermitAlreadyExistsAndVoteDAIPermitDoesNotRevert() public {
         vm.prank(owner);
-        MockDAIPermit(address(testDAI)).permit(owner, address(mrc), nonce, type(uint256).max, true, v, r, s);
+        TestDAI(address(testDAI)).permit(owner, address(mrc), nonce, type(uint256).max, true, v, r, s);
 
         // invalid permit with wrong nonce
         SigUtilsDAI.Permit memory permit3 = SigUtilsDAI.Permit({
