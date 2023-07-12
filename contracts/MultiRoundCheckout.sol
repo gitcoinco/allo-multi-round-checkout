@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "./IVotable.sol";
+import "./IDAIPermit.sol";
 
 error VotesNotEqualRoundsLength();
 error AmountsNotEqualRoundsLength();
@@ -85,6 +86,62 @@ contract MultiRoundCheckout is
             address(this),
             totalAmount,
             type(uint256).max,
+            v,
+            r,
+            s
+        ) {} catch Error (string memory reason) {
+            if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
+                revert(reason);
+            }
+        } catch (bytes memory reason) {
+            if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
+               revert(string(reason));
+            }
+        }
+
+        IERC20Upgradeable(token).transferFrom(msg.sender, address(this), totalAmount);
+
+        for (uint i = 0; i < rounds.length; i++) {
+            IVotable round = IVotable(rounds[i]);
+            IERC20Upgradeable(token).approve(address(round.votingStrategy()), amounts[i]);
+            round.vote(votes[i]);
+        }
+
+        // ToDo: check if permit & approve works as expected
+
+        if (IERC20Upgradeable(token).balanceOf(address(this)) != 0) {
+            revert ExcessAmountSent();
+        }
+    }
+
+    /**
+     * voteDAIPermit: votes for multiple rounds at once with DAI.
+     */
+    function voteDAIPermit(
+        bytes[][] memory votes,
+        address[] memory rounds,
+        uint256[] memory amounts,
+        uint256 totalAmount,
+        address token,
+        uint256 nonce,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) public nonReentrant whenNotPaused {
+        if (votes.length != rounds.length) {
+            revert VotesNotEqualRoundsLength();
+        }
+
+        if (amounts.length != rounds.length) {
+            revert AmountsNotEqualRoundsLength();
+        }
+
+        try IDAIPermit(token).permit(
+            msg.sender,
+            address(this),
+            nonce,
+            type(uint256).max,
+            true,
             v,
             r,
             s
