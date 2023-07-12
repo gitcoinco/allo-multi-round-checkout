@@ -1,13 +1,23 @@
-# Sample Hardhat Project
+# Allo MultiRoundCheck
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+TODO
 
-Try running some of the following tasks:
+## Setup
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
+```
+git clone
+git submodule update --init --recursive
+npm i
+```
+
+## Tests
+
+```
+forge test
+```
+
+## Gas Bench
+
+```
+npx hardhat run scripts/gas-bench.ts --typecheck
 ```
