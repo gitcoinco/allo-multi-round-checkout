@@ -76,6 +76,7 @@ contract MultiRoundCheckout is
         uint256[] memory amounts,
         uint256 totalAmount,
         address token,
+        uint256 deadline,
         uint8 v,
         bytes32 r,
         bytes32 s
@@ -94,7 +95,7 @@ contract MultiRoundCheckout is
             msg.sender,
             address(this),
             totalAmount,
-            type(uint256).max,
+            deadline,
             v,
             r,
             s
@@ -134,6 +135,7 @@ contract MultiRoundCheckout is
         uint256[] memory amounts,
         uint256 totalAmount,
         address token,
+        uint256 deadline,
         uint256 nonce,
         uint8 v,
         bytes32 r,
@@ -153,7 +155,7 @@ contract MultiRoundCheckout is
             msg.sender,
             address(this),
             nonce,
-            type(uint256).max,
+            deadline,
             true,
             v,
             r,

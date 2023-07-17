@@ -29,11 +29,11 @@ contract MockRoundImplementationERC20 is IVotable {
             rounds[0] = address(this);
             votes[0] = data;
             amounts[0] = msg.value;
-            MultiRoundCheckout(msg.sender).voteERC20Permit(votes, rounds, amounts, totalAmount, token, v, r, s);
+            MultiRoundCheckout(msg.sender).voteERC20Permit(votes, rounds, amounts, totalAmount, token, type(uint256).max, v, r, s);
         }
         receivedVotes = data;
         MockVotingStrategy(votingStrategy).vote(data, msg.sender);
-    }    
+    }
 
     function getReceivedVotes() public view returns (bytes[] memory) {
         return receivedVotes;
