@@ -62,7 +62,7 @@ contract MrcTestVoteERC20Permit is Test {
         votes[0].push(abi.encode(address(testERC20), 25));
         votes[1].push(abi.encode(address(testERC20), 25));
         votes[1].push(abi.encode(address(testERC20), 25));
-        
+
         permit = SigUtils.Permit({
             owner: owner,
             spender: address(mrc),
@@ -269,5 +269,31 @@ contract MrcTestVoteERC20Permit is Test {
         );
     }
 
+    function testVoteERC20DoS() public {
+        testERC20.mint(address(mrc), 1);
+
+        assertEq(testERC20.balanceOf(owner), 100);
+        assertEq(testERC20.balanceOf(address(mrc)), 1);
+        assertEq(testERC20.allowance(owner, address(mrc)), 0);
+
+        // we need to make sure that `vote` doesn't fail
+        // instead of checking that the final balance is zero, MRC checks
+        // that the final balance is equal to the initial one.
+        vm.prank(owner);
+        mrc.voteERC20Permit(
+            votes,
+            rounds,
+            amounts,
+            totalAmount,
+            token1,
+            v,
+            r,
+            s
+        );
+
+        assertEq(testERC20.allowance(owner, address(mrc)), 0);
+        assertEq(testERC20.balanceOf(owner), 0);
+        assertEq(testERC20.balanceOf(address(votingStrategy)), 100);
+    }
 }
 
