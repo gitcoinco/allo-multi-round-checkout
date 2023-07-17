@@ -89,6 +89,7 @@ contract MrcTestVoteERC20Permit is Test {
             amounts,
             totalAmount,
             token1,
+            type(uint256).max,
             v,
             r,
             s
@@ -110,6 +111,7 @@ contract MrcTestVoteERC20Permit is Test {
             amounts,
             totalAmount,
             token1,
+            type(uint256).max,
             v,
             r,
             s
@@ -128,6 +130,7 @@ contract MrcTestVoteERC20Permit is Test {
             amounts,
             totalAmount,
             token1,
+            type(uint256).max,
             v,
             r,
             s
@@ -147,6 +150,7 @@ contract MrcTestVoteERC20Permit is Test {
             amounts,
             totalAmount,
             token1,
+            type(uint256).max,
             v,
             r,
             s
@@ -166,6 +170,7 @@ contract MrcTestVoteERC20Permit is Test {
             wrongAmounts,
             totalAmount,
             token1,
+            type(uint256).max,
             v,
             r,
             s
@@ -200,6 +205,7 @@ contract MrcTestVoteERC20Permit is Test {
             amounts,
             totalAmount2,
             token1,
+            type(uint256).max,
             v2,
             r2,
             s2
@@ -231,6 +237,7 @@ contract MrcTestVoteERC20Permit is Test {
             amounts,
             totalAmount,
             token1,
+            type(uint256).max,
             v3,
             r3,
             s3
@@ -263,6 +270,7 @@ contract MrcTestVoteERC20Permit is Test {
             amounts,
             totalAmount,
             token1,
+            type(uint256).max,
             v3,
             r3,
             s3
@@ -286,6 +294,7 @@ contract MrcTestVoteERC20Permit is Test {
             amounts,
             totalAmount,
             token1,
+            type(uint256).max,
             v,
             r,
             s
