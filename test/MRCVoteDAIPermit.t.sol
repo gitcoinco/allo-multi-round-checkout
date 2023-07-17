@@ -65,7 +65,7 @@ contract MrcTestVoteDAIPermit is Test {
         votes[0].push(abi.encode(address(testDAI), 25));
         votes[1].push(abi.encode(address(testDAI), 25));
         votes[1].push(abi.encode(address(testDAI), 25));
-        
+
         permit = SigUtilsDAI.Permit({
             holder: owner,
             spender: address(mrc),
@@ -275,5 +275,32 @@ contract MrcTestVoteDAIPermit is Test {
         );
     }
 
+    function testVoteDAIDoS() public {
+        testDAI.mint(address(mrc), 1);
+
+        assertEq(testDAI.balanceOf(owner), 100);
+        /* assertEq(testDAI.balanceOf(address(mrc)), 1); */
+        assertEq(testDAI.allowance(owner, address(mrc)), 0);
+
+        // we need to make sure that `vote` doesn't fail
+        // instead of checking that the final balance is zero, MRC checks
+        // that the final balance is equal to the initial one.
+        vm.prank(owner);
+        mrc.voteDAIPermit(
+            votes,
+            rounds,
+            amounts,
+            totalAmount,
+            token1,
+            nonce,
+            v,
+            r,
+            s
+        );
+
+        /* assertEq(testDAI.allowance(owner, address(mrc)), 0); */
+        assertEq(testDAI.balanceOf(owner), 0);
+        assertEq(testDAI.balanceOf(address(votingStrategy)), 100);
+    }
 }
 

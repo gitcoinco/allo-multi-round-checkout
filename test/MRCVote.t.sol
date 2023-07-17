@@ -136,5 +136,23 @@ contract MrcTestVote is Test {
         vm.expectRevert(ExcessAmountSent.selector);
         mrc.vote{value: totalValue + 1}(votes, rounds, amounts);
     }
+
+    function testVoteDoS() public {
+        vm.deal(address(this), 10 ether);
+
+        // let's simulate another contract sent 1 ETH
+        // to the MRC contract during a selfdestruct
+        vm.deal(address(mrc), 1);
+
+        uint256 totalValue = 0;
+        for (uint256 i = 0; i < amounts.length; i++) {
+            totalValue += amounts[i];
+        }
+
+        // we need to make sure that `vote` doesn't fail
+        // instead of checking that the final balance is zero, MRC checks
+        // that the final balance is equal to the initial one.
+        mrc.vote{value: totalValue}(votes, rounds, amounts);
+    }
 }
 

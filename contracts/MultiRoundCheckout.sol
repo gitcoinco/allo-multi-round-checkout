@@ -49,12 +49,15 @@ contract MultiRoundCheckout is
             revert AmountsNotEqualRoundsLength();
         }
 
+        // possible previous balance + msg.value
+        uint256 initialBalance = address(this).balance;
+
         for (uint i = 0; i < rounds.length; i++) {
             IVotable round = IVotable(payable(rounds[i]));
             round.vote{value: amounts[i]}(votes[i]);
         }
 
-        if (address(this).balance != 0) {
+        if (address(this).balance != initialBalance - msg.value) {
             revert ExcessAmountSent();
         }
     }
@@ -80,6 +83,8 @@ contract MultiRoundCheckout is
         if (amounts.length != rounds.length) {
             revert AmountsNotEqualRoundsLength();
         }
+
+        uint256 initialBalance = IERC20Upgradeable(token).balanceOf(address(this));
 
         try IERC20PermitUpgradeable(token).permit(
             msg.sender,
@@ -107,9 +112,7 @@ contract MultiRoundCheckout is
             round.vote(votes[i]);
         }
 
-        // ToDo: check if permit & approve works as expected
-
-        if (IERC20Upgradeable(token).balanceOf(address(this)) != 0) {
+        if (IERC20Upgradeable(token).balanceOf(address(this)) != initialBalance) {
             revert ExcessAmountSent();
         }
     }
@@ -135,6 +138,8 @@ contract MultiRoundCheckout is
         if (amounts.length != rounds.length) {
             revert AmountsNotEqualRoundsLength();
         }
+
+        uint256 initialBalance = IERC20Upgradeable(token).balanceOf(address(this));
 
         try IDAIPermit(token).permit(
             msg.sender,
@@ -163,9 +168,7 @@ contract MultiRoundCheckout is
             round.vote(votes[i]);
         }
 
-        // ToDo: check if permit & approve works as expected
-
-        if (IERC20Upgradeable(token).balanceOf(address(this)) != 0) {
+        if (IERC20Upgradeable(token).balanceOf(address(this)) != initialBalance) {
             revert ExcessAmountSent();
         }
     }
