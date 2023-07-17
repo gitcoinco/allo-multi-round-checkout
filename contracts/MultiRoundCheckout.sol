@@ -52,9 +52,13 @@ contract MultiRoundCheckout is
         // possible previous balance + msg.value
         uint256 initialBalance = address(this).balance;
 
-        for (uint i = 0; i < rounds.length; i++) {
+        for (uint256 i = 0; i < rounds.length;) {
             IVotable round = IVotable(payable(rounds[i]));
             round.vote{value: amounts[i]}(votes[i]);
+
+            unchecked {
+                ++i;
+            }
         }
 
         if (address(this).balance != initialBalance - msg.value) {
@@ -106,10 +110,14 @@ contract MultiRoundCheckout is
 
         IERC20Upgradeable(token).transferFrom(msg.sender, address(this), totalAmount);
 
-        for (uint i = 0; i < rounds.length; i++) {
+        for (uint256 i = 0; i < rounds.length;) {
             IVotable round = IVotable(rounds[i]);
             IERC20Upgradeable(token).approve(address(round.votingStrategy()), amounts[i]);
             round.vote(votes[i]);
+
+            unchecked {
+                ++i;
+            }
         }
 
         if (IERC20Upgradeable(token).balanceOf(address(this)) != initialBalance) {
@@ -162,10 +170,14 @@ contract MultiRoundCheckout is
 
         IERC20Upgradeable(token).transferFrom(msg.sender, address(this), totalAmount);
 
-        for (uint i = 0; i < rounds.length; i++) {
+        for (uint256 i = 0; i < rounds.length;) {
             IVotable round = IVotable(rounds[i]);
             IERC20Upgradeable(token).approve(address(round.votingStrategy()), amounts[i]);
             round.vote(votes[i]);
+
+            unchecked {
+                ++i;
+            }
         }
 
         if (IERC20Upgradeable(token).balanceOf(address(this)) != initialBalance) {
