@@ -28,3 +28,13 @@ export const prompt = async (question: string) => {
 // pretty number
 export const pn = (n: bigint | string) =>
   n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "_");
+
+export const getEnv = (name: string) => {
+  const value = process.env[name];
+
+  if (value === undefined || value === "") {
+    throw new Error(`envrionment variable ${name} is not set`);
+  }
+
+  return value;
+};
