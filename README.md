@@ -1,6 +1,17 @@
 # Allo MultiRoundCheck
 
-TODO
+The MultiRoundCheckout contract is a smart contract designed to simplify the process of donating to multiple rounds on the Allo V1 protocol
+and voting with ERC20 tokens.
+It streamlines the donation and voting process by enabling users to perform these actions using a single transaction,
+eliminating the need to send multiple transactions for each round.
+
+## Features
+
+1. **Multiple Rounds with one transatction**: With MultiRoundCheckout, users can donate to multiple rounds on the Allo V1 protocol using just one transaction, saving time and gas fees.
+
+2. **ERC20 permit/donate in one transaction**: Instead of executing separate transactions for token approval and donation, users can now vote with ERC20 tokens in a single transaction.
+The contract supports ERC20 permit-compatible tokens, specifically those implementing ERC-2612 or DAI permit.
+This enables users to sign a "permit" message, simplifying the token approval process, saving gas fees and reducing the number of transactions needed to donate.
 
 ## Setup
 
