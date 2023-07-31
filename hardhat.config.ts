@@ -24,11 +24,12 @@ const config: HardhatUserConfig = {
         mnemonic: getEnv("MNEMONIC"),
       },
     },
-    pngTestnet: {
+    pgnTestnet: {
       url: getEnv("PGN_TESTNET_RPC_URL"),
       accounts: {
         mnemonic: getEnv("MNEMONIC"),
       },
+      // gasPrice: 1000000000,
     },
   },
 };
