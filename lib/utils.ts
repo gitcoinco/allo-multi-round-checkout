@@ -29,10 +29,14 @@ export const prompt = async (question: string) => {
 export const pn = (n: bigint | string) =>
   n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "_");
 
-export const getEnv = (name: string) => {
+export const getEnv = (name: string, defaultValue?: string) => {
   const value = process.env[name];
 
   if (value === undefined || value === "") {
+    if (defaultValue !== undefined) {
+      return defaultValue;
+    }
+
     throw new Error(`envrionment variable ${name} is not set`);
   }
 
