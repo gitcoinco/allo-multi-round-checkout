@@ -36,7 +36,7 @@ const config: HardhatUserConfig = {
       accounts: {
         mnemonic: getEnv("MNEMONIC"),
       },
-      gasPrice: 1000000000,
+      // gasPrice: 1000000000,
     },
     pgn: {
       url: getEnv("PGN_RPC_URL"),
