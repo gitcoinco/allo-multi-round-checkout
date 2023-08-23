@@ -38,6 +38,10 @@ const config: HardhatUserConfig = {
       },
       // gasPrice: 1000000000,
     },
+    arbitrumTestnet: {
+      url: getEnv("ARBITRUM_TESTNET_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
     pgn: {
       url: getEnv("PGN_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
@@ -54,6 +58,10 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       url: getEnv("MAINNET_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
+    arbitrumOne: {
+      url: getEnv("ARBITRUM_ONE_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
     },
   },

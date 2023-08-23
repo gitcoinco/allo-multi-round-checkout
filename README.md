@@ -45,12 +45,14 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 
 ## Deployments
 
-| Chain       | Address                                    |
-|-------------|--------------------------------------------|
-| Ethereum    | 0x3bA9DF642f5e895DC76d3Aa9e4CE8291108E65b1 |
-| PGN         | 0x03506eD3f57892C85DB20C36846e9c808aFe9ef4 |
-| Optimism    | 0x15fa08599EB017F89c1712d0Fe76138899FdB9db |
-| Fantom      | 0x03506eD3f57892C85DB20C36846e9c808aFe9ef4 |
-| Goerli      | 0x69433D914c7Cd8b69710a3275bcF3df4CB3eDA94 |
-| PGN Testnet | 0x4268900E904aD87903De593AA5424406066d9ea2 |
+| Chain           | Address                                    |
+|-----------------|--------------------------------------------|
+| Ethereum        | 0x3bA9DF642f5e895DC76d3Aa9e4CE8291108E65b1 |
+| PGN             | 0x03506eD3f57892C85DB20C36846e9c808aFe9ef4 |
+| Optimism        | 0x15fa08599EB017F89c1712d0Fe76138899FdB9db |
+| Fantom          | 0x03506eD3f57892C85DB20C36846e9c808aFe9ef4 |
+| Arbitrum One    | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
+| Goerli          | 0x69433D914c7Cd8b69710a3275bcF3df4CB3eDA94 |
+| PGN Testnet     | 0x4268900E904aD87903De593AA5424406066d9ea2 |
+| Arbitrum Goerli | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
 
