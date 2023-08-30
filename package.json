@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-foundry": "^1.0.2",
+    "@nomicfoundation/hardhat-ledger": "^1.0.1",
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
     "@openzeppelin/hardhat-upgrades": "^2.0.1",
     "ethers": "^6.1.0",

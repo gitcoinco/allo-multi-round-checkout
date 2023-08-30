@@ -1,5 +1,6 @@
 import hre, { ethers, upgrades } from "hardhat";
-import { pn, prompt } from "../lib/utils";
+import { pn, prompt } from "../../lib/utils";
+import { getEnv } from "../../lib/utils";
 
 async function main() {
   const network = await ethers.provider.getNetwork();
@@ -11,7 +12,7 @@ async function main() {
     // with hardware wallet
     console.log("Waiting for hardware wallet to connect...");
     // account = new LedgerSigner(ethers.provider);
-    account = (await ethers.getSigners())[0];
+    account = await ethers.getSigner(getEnv("HARDWARE_WALLET_ACCOUNT"));
   } else {
     // default without hardware wallet
     account = (await ethers.getSigners())[0];
