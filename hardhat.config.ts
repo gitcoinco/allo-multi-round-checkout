@@ -64,12 +64,30 @@ const config: HardhatUserConfig = {
       url: getEnv("ARBITRUM_ONE_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
     },
+    polygonMumbai: {
+      url: getEnv("POLYGON_MUMBAI_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
+    polygon: {
+      url: getEnv("POLYGON_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
+    avalancheFuji: {
+      url: getEnv("AVALANCHE_FUJI_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
+    avalanche: {
+      url: getEnv("AVALANCHE_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
   },
   etherscan: {
     apiKey: {
       mainnet: getEnv("ETHERSCAN_ETHEREUM_API_KEY", ""),
       optimisticEthereum: getEnv("ETHERSCAN_OPTIMISM_API_KEY", ""),
       opera: getEnv("ETHERSCAN_FANTOM_API_KEY"),
+      polygon: getEnv("ETHERSCAN_POLYGON_API_KEY"),
+      avalanche: getEnv("ETHERSCAN_AVALANCHE_API_KEY"),
     },
   },
 };
