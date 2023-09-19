@@ -56,5 +56,6 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | PGN Testnet     | 0x4268900E904aD87903De593AA5424406066d9ea2 |
 | Arbitrum Goerli | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
 | Polygon Mumbai  | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
+| Polygon         | 0xe04d9e9CcDf65EB1Db51E56C04beE4c8582edB73 |
 | Avalanche Fuji  | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
 | Avalanche       | 0xe04d9e9CcDf65EB1Db51E56C04beE4c8582edB73 |
