@@ -56,6 +56,10 @@ const config: HardhatUserConfig = {
       url: getEnv("FANTOM_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
     },
+    fantomTestnet: {
+      url: getEnv("FANTOM_TESTNET_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
     mainnet: {
       url: getEnv("MAINNET_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
