@@ -53,7 +53,7 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | Fantom          | 0x03506eD3f57892C85DB20C36846e9c808aFe9ef4 |
 | Fantom Testnet  | 0x62a850d7805f3Ae382C6eEf7eEB89A31f68Ce2d5 |
 | Arbitrum One    | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
-| Goerli          | 0x69433D914c7Cd8b69710a3275bcF3df4CB3eDA94 |
+| Sepolia         | 0xa54A0c7Bcd37745f7F5817e06b07E2563a07E309 |
 | PGN Testnet     | 0x4268900E904aD87903De593AA5424406066d9ea2 |
 | Arbitrum Goerli | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
 | Polygon Mumbai  | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
