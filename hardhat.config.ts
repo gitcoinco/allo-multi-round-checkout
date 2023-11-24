@@ -25,8 +25,8 @@ const config: HardhatUserConfig = {
         mnemonic: getEnv("MNEMONIC"),
       },
     },
-    goerli: {
-      url: getEnv("GOERLI_RPC_URL"),
+    sepolia: {
+      url: getEnv("SEPOLIA_RPC_URL"),
       accounts: {
         mnemonic: getEnv("MNEMONIC"),
       },
