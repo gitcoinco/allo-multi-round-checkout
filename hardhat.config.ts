@@ -96,6 +96,10 @@ const config: HardhatUserConfig = {
         mnemonic: getEnv("MNEMONIC"),
       },
     },
+    base: {
+      url: getEnv("BASE_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
   },
   etherscan: {
     apiKey: {

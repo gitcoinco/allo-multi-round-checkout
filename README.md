@@ -61,3 +61,4 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | Avalanche Fuji  | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
 | Avalanche       | 0xe04d9e9CcDf65EB1Db51E56C04beE4c8582edB73 |
 | Base Goerli     | 0xa63f8F7E90C538D5173c7467C228fd38422dE9e9 |
+| Base            | 0x7C24f3494CC958CF268a92b45D7e54310d161794 |
