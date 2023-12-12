@@ -60,3 +60,5 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | Polygon         | 0xe04d9e9CcDf65EB1Db51E56C04beE4c8582edB73 |
 | Avalanche Fuji  | 0x8e1bD5Da87C14dd8e08F7ecc2aBf9D1d558ea174 |
 | Avalanche       | 0xe04d9e9CcDf65EB1Db51E56C04beE4c8582edB73 |
+| zkSync Era Goerli | 0x57819f2264Ff3f644c9a3e982EB41b4eE6F9a0aE |
+| zkSync Era        | 0x88e91283d97A482A9e0851dE335d58D97dCfF7b0 |
