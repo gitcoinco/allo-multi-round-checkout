@@ -62,3 +62,5 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | Avalanche       | 0xe04d9e9CcDf65EB1Db51E56C04beE4c8582edB73 |
 | Base Goerli     | 0xa63f8F7E90C538D5173c7467C228fd38422dE9e9 |
 | Base            | 0x7C24f3494CC958CF268a92b45D7e54310d161794 |
+| zkSync Era Goerli | 0x57819f2264Ff3f644c9a3e982EB41b4eE6F9a0aE |
+| zkSync Era        | 0x88e91283d97A482A9e0851dE335d58D97dCfF7b0 |
