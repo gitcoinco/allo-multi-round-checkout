@@ -84,6 +84,22 @@ const config: HardhatUserConfig = {
       url: getEnv("AVALANCHE_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
     },
+    baseSepolia: {
+      url: getEnv("BASE_SEPOLIA_RPC_URL"),
+      accounts: {
+        mnemonic: getEnv("MNEMONIC"),
+      },
+    },
+    baseGoerli: {
+      url: getEnv("BASE_GOERLI_RPC_URL"),
+      accounts: {
+        mnemonic: getEnv("MNEMONIC"),
+      },
+    },
+    base: {
+      url: getEnv("BASE_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
   },
   etherscan: {
     apiKey: {
