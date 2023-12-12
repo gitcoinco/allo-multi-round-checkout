@@ -106,6 +106,13 @@ const config: HardhatUserConfig = {
         mnemonic: getEnv("MNEMONIC"),
       },
     },
+    zksyncEra: {
+      url: getEnv("ZKSYNC_ERA_RPC_URL"),
+      ethNetwork: "mainnet",
+      zksync: true,
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+      verifyURL: "https://explorer.zksync.io/contract_verification",
+    },
   },
   etherscan: {
     apiKey: {
