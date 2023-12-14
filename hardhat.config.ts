@@ -124,7 +124,8 @@ const config: HardhatUserConfig = {
       ethNetwork: "mainnet",
       zksync: true,
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
-      verifyURL: "https://explorer.zksync.io/contract_verification",
+      verifyURL:
+        "https://zksync2-mainnet-explorer.zksync.io/contract_verification",
     },
   },
   etherscan: {
