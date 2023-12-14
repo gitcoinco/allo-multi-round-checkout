@@ -31,9 +31,7 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    hardhat: {
-      zksync: getEnv("ZKSYNC", "false") === "true",
-    },
+    hardhat: {},
     localhost: {
       accounts: {
         mnemonic: getEnv("MNEMONIC"),
