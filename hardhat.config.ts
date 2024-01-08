@@ -1,15 +1,15 @@
 import * as dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
 // import "@nomicfoundation/hardhat-toolbox";
-// import "@openzeppelin/hardhat-upgrades";
+import "@openzeppelin/hardhat-upgrades";
 import { getEnv } from "./lib/utils";
 import "@nomicfoundation/hardhat-ledger";
 import { ethers } from "ethers";
 
-import "@matterlabs/hardhat-zksync-deploy";
-import "@matterlabs/hardhat-zksync-solc";
-import "@matterlabs/hardhat-zksync-upgradable";
-import "@matterlabs/hardhat-zksync-verify";
+// import "@matterlabs/hardhat-zksync-deploy";
+// import "@matterlabs/hardhat-zksync-solc";
+// import "@matterlabs/hardhat-zksync-upgradable";
+// import "@matterlabs/hardhat-zksync-verify";
 
 dotenv.config();
 
