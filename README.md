@@ -64,3 +64,5 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | Base            | 0x7C24f3494CC958CF268a92b45D7e54310d161794 |
 | zkSync Era Goerli | 0x57819f2264Ff3f644c9a3e982EB41b4eE6F9a0aE |
 | zkSync Era        | 0x88e91283d97A482A9e0851dE335d58D97dCfF7b0 |
+| Scroll Sepolia | 0x8Bd6Bc246FAF14B767954997fF3966CD1c0Bf0f5 |
+| Scroll         | 0x8Bd6Bc246FAF14B767954997fF3966CD1c0Bf0f5|

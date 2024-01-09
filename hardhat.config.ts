@@ -125,6 +125,16 @@ const config: HardhatUserConfig = {
       verifyURL:
         "https://zksync2-mainnet-explorer.zksync.io/contract_verification",
     },
+    scrollSepolia: {
+      url: getEnv("SCROLL_SEPOLIA_RPC_URL"),
+      accounts: {
+        mnemonic: getEnv("MNEMONIC"),
+      },
+    },
+    scroll: {
+      url: getEnv("SCROLL_RPC_URL"),
+      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
+    },
   },
   etherscan: {
     apiKey: {
@@ -133,7 +143,27 @@ const config: HardhatUserConfig = {
       opera: getEnv("ETHERSCAN_FANTOM_API_KEY"),
       polygon: getEnv("ETHERSCAN_POLYGON_API_KEY"),
       avalanche: getEnv("ETHERSCAN_AVALANCHE_API_KEY"),
+      scrollSepolia: getEnv("ETHERSCAN_SCROLL_API_KEY"),
+      scroll: getEnv("ETHERSCAN_SCROLL_API_KEY"),
     },
+    customChains: [
+      {
+        network: "scrollSepolia",
+        chainId: 534351,
+        urls: {
+          apiURL: "https://sepolia.scrollscan.com/api",
+          browserURL: "https://sepolia.scrollscan.com",
+        },
+      },
+      {
+        network: "scroll",
+        chainId: 534352,
+        urls: {
+          apiURL: "https://scrollscan.com/api",
+          browserURL: "https://scrollscan.com",
+        },
+      },
+    ],
   },
 };
 
