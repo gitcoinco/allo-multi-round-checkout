@@ -17,7 +17,6 @@ This enables users to sign a "permit" message, simplifying the token approval pr
 
 ```
 git clone
-git submodule update --init --recursive
 npm i
 ```
 
