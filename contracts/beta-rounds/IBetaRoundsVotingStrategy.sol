@@ -9,13 +9,13 @@ pragma solidity ^0.8.17;
  * and would be deployed before creating a round
  */
 abstract contract IVotingStrategy {
+    // voting amount
+    // voter address
+    // grant address
+    // project id
+    // application index
+    // round address
     event Voted( // voting token
-        // voting amount
-        // voter address
-        // grant address
-        // project id
-        // application index
-        // round address
         address token,
         uint256 amount,
         address indexed voter,
