@@ -3,5 +3,6 @@ pragma solidity ^0.8.17;
 
 abstract contract IVotable {
     address public votingStrategy;
-    function vote(bytes[] memory data) external virtual payable;
+
+    function vote(bytes[] memory data) external payable virtual;
 }

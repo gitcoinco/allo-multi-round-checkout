@@ -11,8 +11,8 @@ contract MockRoundImplementationETH is IVotable {
         tryReentrancy = _tryReentrancy;
     }
 
-    function vote(bytes[] memory data) external override payable {
-        if (tryReentrancy)  {
+    function vote(bytes[] memory data) external payable override {
+        if (tryReentrancy) {
             address[] memory rounds = new address[](1);
             bytes[][] memory votes = new bytes[][](1);
             uint256[] memory amounts = new uint256[](1);
@@ -22,7 +22,7 @@ contract MockRoundImplementationETH is IVotable {
             MultiRoundCheckout(msg.sender).vote{value: msg.value}(votes, rounds, amounts);
         }
         receivedVotes = data;
-    }    
+    }
 
     function getReceivedVotes() public view returns (bytes[] memory) {
         return receivedVotes;

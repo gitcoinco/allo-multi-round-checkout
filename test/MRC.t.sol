@@ -27,6 +27,4 @@ contract MrcTestVote is Test {
         vm.expectRevert(bytes("Ownable: caller is not the owner"));
         mrc.unpause();
     }
-
 }
-

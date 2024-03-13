@@ -2,7 +2,6 @@
 pragma solidity ^0.8.17;
 
 interface IDAIPermit {
-
     function permit(
         address holder,
         address spender,
@@ -13,5 +12,4 @@ interface IDAIPermit {
         bytes32 r,
         bytes32 s
     ) external;
-
 }

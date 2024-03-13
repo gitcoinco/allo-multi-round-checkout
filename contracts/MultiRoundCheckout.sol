@@ -13,11 +13,7 @@ error VotesNotEqualRoundsLength();
 error AmountsNotEqualRoundsLength();
 error ExcessAmountSent();
 
-contract MultiRoundCheckout is
-    OwnableUpgradeable,
-    PausableUpgradeable,
-    ReentrancyGuardUpgradeable
-{
+contract MultiRoundCheckout is OwnableUpgradeable, PausableUpgradeable, ReentrancyGuardUpgradeable {
     function initialize() public initializer {
         __Ownable_init();
         __Pausable_init();
@@ -36,11 +32,12 @@ contract MultiRoundCheckout is
      * vote: votes for multiple rounds at once with ETH.
      * votes is a 2d array. first index is the index of the round address in the second param.
      */
-    function vote(
-        bytes[][] memory votes,
-        address[] memory rounds,
-        uint256[] memory amounts
-    ) public payable nonReentrant whenNotPaused {
+    function vote(bytes[][] memory votes, address[] memory rounds, uint256[] memory amounts)
+        public
+        payable
+        nonReentrant
+        whenNotPaused
+    {
         if (votes.length != rounds.length) {
             revert VotesNotEqualRoundsLength();
         }
@@ -66,7 +63,6 @@ contract MultiRoundCheckout is
         }
     }
 
-
     /**
      * voteERC20Permit: votes for multiple rounds at once with ERC20Permit tokens.
      */
@@ -91,21 +87,14 @@ contract MultiRoundCheckout is
 
         uint256 initialBalance = IERC20Upgradeable(token).balanceOf(address(this));
 
-        try IERC20PermitUpgradeable(token).permit(
-            msg.sender,
-            address(this),
-            totalAmount,
-            deadline,
-            v,
-            r,
-            s
-        ) {} catch Error (string memory reason) {
-            if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
+        try IERC20PermitUpgradeable(token).permit(msg.sender, address(this), totalAmount, deadline, v, r, s) {}
+        catch Error(string memory reason) {
+            if (IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
                 revert(reason);
             }
         } catch (bytes memory reason) {
-            if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
-               revert(string(reason));
+            if (IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
+                revert(string(reason));
             }
         }
 
@@ -151,22 +140,14 @@ contract MultiRoundCheckout is
 
         uint256 initialBalance = IERC20Upgradeable(token).balanceOf(address(this));
 
-        try IDAIPermit(token).permit(
-            msg.sender,
-            address(this),
-            nonce,
-            deadline,
-            true,
-            v,
-            r,
-            s
-        ) {} catch Error (string memory reason) {
-            if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
+        try IDAIPermit(token).permit(msg.sender, address(this), nonce, deadline, true, v, r, s) {}
+        catch Error(string memory reason) {
+            if (IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
                 revert(reason);
             }
         } catch (bytes memory reason) {
-            if ( IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
-               revert(string(reason));
+            if (IERC20Upgradeable(token).allowance(msg.sender, address(this)) < totalAmount) {
+                revert(string(reason));
             }
         }
 
