@@ -45,7 +45,7 @@ contract MrcTestVoteDAIPermit is Test {
 
         sigUtilsDAI = new SigUtilsDAI(testDAI.DOMAIN_SEPARATOR());
 
-        mrc.initialize();
+        mrc.initialize(address(1));
         rounds[0] = address(round1);
         rounds[1] = address(round2);
 

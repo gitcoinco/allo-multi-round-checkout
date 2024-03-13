@@ -5,6 +5,8 @@ import { getEnv } from "../../lib/utils";
 async function main() {
   const network = await ethers.provider.getNetwork();
   const networkName = hre.network.name;
+  const allo = "0x1133eA7Af70876e64665ecD07C0A0476d09465a1";
+
   let account;
   let accountAddress;
 
@@ -31,9 +33,9 @@ async function main() {
 
   const MultiRoundCheckout = await ethers.getContractFactory(
     "MultiRoundCheckout",
-    account
+    account,
   );
-  const instance = await upgrades.deployProxy(MultiRoundCheckout, []);
+  const instance = await upgrades.deployProxy(MultiRoundCheckout, [allo]);
   await instance.waitForDeployment();
 
   const tx = instance.deploymentTransaction();

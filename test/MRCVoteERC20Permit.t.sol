@@ -41,7 +41,7 @@ contract MrcTestVoteERC20Permit is Test {
 
         sigUtils = new SigUtils(testERC20.DOMAIN_SEPARATOR());
 
-        mrc.initialize();
+        mrc.initialize(address(1));
         testERC20.initialize("Test", "TEST");
         rounds[0] = address(round1);
         rounds[1] = address(round2);

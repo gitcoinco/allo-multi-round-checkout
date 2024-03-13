@@ -7,50 +7,51 @@ import { getEnv } from "../../lib/utils";
 // not used directly.
 
 const CONTRACT_ADDRESS = "";
+  const allo = "0x1133eA7Af70876e64665ecD07C0A0476d09465a1";
 
-async function main() {
-  const network = await ethers.provider.getNetwork();
-  const networkName = hre.network.name;
-  let account;
-  let accountAddress;
+  async function main() {
+    const network = await ethers.provider.getNetwork();
+    const networkName = hre.network.name;
+    let account;
+    let accountAddress;
 
-  if (process.env.USE_HARDWARE_WALLET === "true") {
-    // with hardware wallet
-    console.log("Waiting for hardware wallet to connect...");
-    // account = new LedgerSigner(ethers.provider);
-    account = await ethers.getSigner(getEnv("HARDWARE_WALLET_ACCOUNT"));
-  } else {
-    // default without hardware wallet
-    account = (await ethers.getSigners())[0];
+    if (process.env.USE_HARDWARE_WALLET === "true") {
+      // with hardware wallet
+      console.log("Waiting for hardware wallet to connect...");
+      // account = new LedgerSigner(ethers.provider);
+      account = await ethers.getSigner(getEnv("HARDWARE_WALLET_ACCOUNT"));
+    } else {
+      // default without hardware wallet
+      account = (await ethers.getSigners())[0];
+    }
+
+    accountAddress = account.address;
+    const balance = await ethers.provider.getBalance(accountAddress);
+
+    console.log(`chainId: ${network.chainId}`);
+    console.log(`network: ${networkName} (from ethers: ${network.name})`);
+    console.log(`account: ${accountAddress}`);
+    console.log(`balance: ${pn(balance.toString())}`);
+
+    await prompt(`do you want to initial the contract at ${CONTRACT_ADDRESS}?`);
+    console.log("init...");
+
+    const implementation = await ethers.getContractAt(
+      "MultiRoundCheckout",
+      CONTRACT_ADDRESS,
+      account,
+    );
+    const tx = await implementation.initialize(allo);
+    const rec = await tx.wait();
+    if (rec === null) {
+      console.error("cannot fetch receipt");
+      return;
+    }
+
+    console.log("tx hash", tx.hash);
+    const gas = pn(rec.gasUsed.toString());
+    console.log(`gas used: ${gas}`);
   }
-
-  accountAddress = account.address;
-  const balance = await ethers.provider.getBalance(accountAddress);
-
-  console.log(`chainId: ${network.chainId}`);
-  console.log(`network: ${networkName} (from ethers: ${network.name})`);
-  console.log(`account: ${accountAddress}`);
-  console.log(`balance: ${pn(balance.toString())}`);
-
-  await prompt(`do you want to initial the contract at ${CONTRACT_ADDRESS}?`);
-  console.log("init...");
-
-  const implementation = await ethers.getContractAt(
-    "MultiRoundCheckout",
-    CONTRACT_ADDRESS,
-    account
-  );
-  const tx = await implementation.initialize();
-  const rec = await tx.wait();
-  if (rec === null) {
-    console.error("cannot fetch receipt");
-    return;
-  }
-
-  console.log("tx hash", tx.hash);
-  const gas = pn(rec.gasUsed.toString());
-  console.log(`gas used: ${gas}`);
-}
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.

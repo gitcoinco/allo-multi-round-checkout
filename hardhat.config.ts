@@ -13,13 +13,23 @@ import { ethers } from "ethers";
 
 dotenv.config();
 
+const account = () => {
+  if (process.env.PRIVATE_KEY) {
+    return [getEnv("PRIVATE_KEY")];
+  } else {
+    return {
+      mnemonic: getEnv("MNEMONIC"),
+    };
+  }
+};
+
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.18",
+    version: "0.8.20",
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200,
+        runs: 400,
       },
     },
   },
@@ -33,21 +43,15 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {},
     localhost: {
-      accounts: {
-        mnemonic: getEnv("MNEMONIC"),
-      },
+      accounts: account(),
     },
     sepolia: {
       url: getEnv("SEPOLIA_RPC_URL"),
-      accounts: {
-        mnemonic: getEnv("MNEMONIC"),
-      },
+      accounts: account(),
     },
     pgnTestnet: {
       url: getEnv("PGN_TESTNET_RPC_URL"),
-      accounts: {
-        mnemonic: getEnv("MNEMONIC"),
-      },
+      accounts: account(),
       // gasPrice: 1000000000,
     },
     arbitrumTestnet: {
@@ -98,15 +102,11 @@ const config: HardhatUserConfig = {
     },
     baseSepolia: {
       url: getEnv("BASE_SEPOLIA_RPC_URL"),
-      accounts: {
-        mnemonic: getEnv("MNEMONIC"),
-      },
+      accounts: account(),
     },
     baseGoerli: {
       url: getEnv("BASE_GOERLI_RPC_URL"),
-      accounts: {
-        mnemonic: getEnv("MNEMONIC"),
-      },
+      accounts: account(),
     },
     base: {
       url: getEnv("BASE_RPC_URL"),
@@ -127,9 +127,7 @@ const config: HardhatUserConfig = {
     },
     scrollSepolia: {
       url: getEnv("SCROLL_SEPOLIA_RPC_URL"),
-      accounts: {
-        mnemonic: getEnv("MNEMONIC"),
-      },
+      accounts: account(),
     },
     scroll: {
       url: getEnv("SCROLL_RPC_URL"),
@@ -139,6 +137,7 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       mainnet: getEnv("ETHERSCAN_ETHEREUM_API_KEY", ""),
+      sepolia: getEnv("ETHERSCAN_ETHEREUM_API_KEY", ""),
       optimisticEthereum: getEnv("ETHERSCAN_OPTIMISM_API_KEY", ""),
       opera: getEnv("ETHERSCAN_FANTOM_API_KEY"),
       polygon: getEnv("ETHERSCAN_POLYGON_API_KEY"),
