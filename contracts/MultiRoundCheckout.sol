@@ -284,6 +284,18 @@ contract MultiRoundCheckout is OwnableUpgradeable, PausableUpgradeable, Reentran
             unchecked {
                 ++i;
             }
+<<<<<<< HEAD
+        }
+    }
+
+    function _validateV2Input(uint256[] memory _poolIds, uint256[] memory _amounts, bytes[] memory _data)
+        internal
+        pure
+    {
+        if (_poolIds.length != _data.length || _poolIds.length != _amounts.length) {
+            revert INVALID_INPUT();
+=======
+>>>>>>> 0036016 (chore: add v2 support)
         }
     }
 
