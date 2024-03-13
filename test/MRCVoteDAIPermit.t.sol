@@ -77,7 +77,6 @@ contract MrcTestVoteDAIPermit is Test {
         digest = sigUtilsDAI.getTypedDataHash(permit);
 
         (v, r, s) = vm.sign(ownerPrivateKey, digest);
-
     }
 
     function testVoteDAIPermit() public {
@@ -85,18 +84,7 @@ contract MrcTestVoteDAIPermit is Test {
         assertEq(testDAI.allowance(owner, address(mrc)), 0);
 
         vm.prank(owner);
-        mrc.voteDAIPermit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            nonce,
-            v,
-            r,
-            s
-        );
+        mrc.voteDAIPermit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, nonce, v, r, s);
 
         assertEq(testDAI.balanceOf(owner), 0);
         assertEq(testDAI.balanceOf(address(votingStrategy)), 100);
@@ -107,18 +95,7 @@ contract MrcTestVoteDAIPermit is Test {
 
         vm.expectRevert(bytes("ReentrancyGuard: reentrant call"));
         vm.prank(owner);
-        mrc.voteDAIPermit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            nonce,
-            v,
-            r,
-            s
-        );
+        mrc.voteDAIPermit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, nonce, v, r, s);
         MockRoundImplementationDAI(rounds[0]).setReentrant(false);
     }
 
@@ -127,18 +104,7 @@ contract MrcTestVoteDAIPermit is Test {
 
         vm.expectRevert(bytes("Pausable: paused"));
         vm.prank(owner);
-        mrc.voteDAIPermit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            nonce,
-            v,
-            r,
-            s
-        );
+        mrc.voteDAIPermit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, nonce, v, r, s);
     }
 
     function testVotesLengthCheck() public {
@@ -148,18 +114,7 @@ contract MrcTestVoteDAIPermit is Test {
         roundsWrongLength[2] = address(round3);
 
         vm.expectRevert(VotesNotEqualRoundsLength.selector);
-        mrc.voteDAIPermit(
-            votes,
-            roundsWrongLength,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            nonce,
-            v,
-            r,
-            s
-        );
+        mrc.voteDAIPermit(votes, roundsWrongLength, amounts, totalAmount, token1, type(uint256).max, nonce, v, r, s);
     }
 
     function testAmountsLengthCheck() public {
@@ -169,18 +124,7 @@ contract MrcTestVoteDAIPermit is Test {
         wrongAmounts[2] = 3;
 
         vm.expectRevert(AmountsNotEqualRoundsLength.selector);
-        mrc.voteDAIPermit(
-            votes,
-            rounds,
-            wrongAmounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            nonce,
-            v,
-            r,
-            s
-        );
+        mrc.voteDAIPermit(votes, rounds, wrongAmounts, totalAmount, token1, type(uint256).max, nonce, v, r, s);
     }
 
     function testExcessAmountSent() public {
@@ -204,18 +148,7 @@ contract MrcTestVoteDAIPermit is Test {
 
         vm.prank(owner2);
         vm.expectRevert(ExcessAmountSent.selector);
-        mrc.voteDAIPermit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount2,
-            token1,
-            type(uint256).max,
-            nonce,
-            v2,
-            r2,
-            s2
-        );
+        mrc.voteDAIPermit(votes, rounds, amounts, totalAmount2, token1, type(uint256).max, nonce, v2, r2, s2);
     }
 
     function testPermitAlreadyExistsAndVoteDAIPermitDoesNotRevert() public {
@@ -236,18 +169,7 @@ contract MrcTestVoteDAIPermit is Test {
         (uint8 v3, bytes32 r3, bytes32 s3) = vm.sign(ownerPrivateKey, digest3);
 
         vm.prank(owner);
-        mrc.voteDAIPermit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            nonce,
-            v3,
-            r3,
-            s3
-        );
+        mrc.voteDAIPermit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, nonce, v3, r3, s3);
 
         assertEq(testDAI.balanceOf(owner), 0);
         assertEq(testDAI.balanceOf(address(votingStrategy)), 100);
@@ -269,18 +191,7 @@ contract MrcTestVoteDAIPermit is Test {
 
         vm.expectRevert("Dai/invalid-permit");
         vm.prank(owner);
-         mrc.voteDAIPermit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            nonce,
-            v3,
-            r3,
-            s3
-        );
+        mrc.voteDAIPermit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, nonce, v3, r3, s3);
     }
 
     function testVoteDAIDoS() public {
@@ -294,22 +205,10 @@ contract MrcTestVoteDAIPermit is Test {
         // instead of checking that the final balance is zero, MRC checks
         // that the final balance is equal to the initial one.
         vm.prank(owner);
-        mrc.voteDAIPermit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            nonce,
-            v,
-            r,
-            s
-        );
+        mrc.voteDAIPermit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, nonce, v, r, s);
 
         /* assertEq(testDAI.allowance(owner, address(mrc)), 0); */
         assertEq(testDAI.balanceOf(owner), 0);
         assertEq(testDAI.balanceOf(address(votingStrategy)), 100);
     }
 }
-

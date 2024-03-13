@@ -63,19 +63,12 @@ contract MrcTestVoteERC20Permit is Test {
         votes[1].push(abi.encode(address(testERC20), 25));
         votes[1].push(abi.encode(address(testERC20), 25));
 
-        permit = SigUtils.Permit({
-            owner: owner,
-            spender: address(mrc),
-            value: 100,
-            nonce: 0,
-            deadline: type(uint256).max
-
-        });
+        permit =
+            SigUtils.Permit({owner: owner, spender: address(mrc), value: 100, nonce: 0, deadline: type(uint256).max});
 
         digest = sigUtils.getTypedDataHash(permit);
 
         (v, r, s) = vm.sign(ownerPrivateKey, digest);
-
     }
 
     function testVoteERC20Permit() public {
@@ -83,17 +76,7 @@ contract MrcTestVoteERC20Permit is Test {
         assertEq(testERC20.allowance(owner, address(mrc)), 0);
 
         vm.prank(owner);
-        mrc.voteERC20Permit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            v,
-            r,
-            s
-        );
+        mrc.voteERC20Permit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, v, r, s);
 
         assertEq(testERC20.allowance(owner, address(mrc)), 0);
         assertEq(testERC20.balanceOf(owner), 0);
@@ -105,17 +88,7 @@ contract MrcTestVoteERC20Permit is Test {
 
         vm.expectRevert(bytes("ReentrancyGuard: reentrant call"));
         vm.prank(owner);
-        mrc.voteERC20Permit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            v,
-            r,
-            s
-        );
+        mrc.voteERC20Permit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, v, r, s);
         MockRoundImplementationERC20(rounds[0]).setReentrant(false);
     }
 
@@ -124,17 +97,7 @@ contract MrcTestVoteERC20Permit is Test {
 
         vm.expectRevert(bytes("Pausable: paused"));
         vm.prank(owner);
-        mrc.voteERC20Permit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            v,
-            r,
-            s
-        );
+        mrc.voteERC20Permit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, v, r, s);
     }
 
     function testVotesLengthCheck() public {
@@ -144,17 +107,7 @@ contract MrcTestVoteERC20Permit is Test {
         roundsWrongLength[2] = address(round3);
 
         vm.expectRevert(VotesNotEqualRoundsLength.selector);
-         mrc.voteERC20Permit(
-            votes,
-            roundsWrongLength,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            v,
-            r,
-            s
-        );
+        mrc.voteERC20Permit(votes, roundsWrongLength, amounts, totalAmount, token1, type(uint256).max, v, r, s);
     }
 
     function testAmountsLengthCheck() public {
@@ -164,17 +117,7 @@ contract MrcTestVoteERC20Permit is Test {
         wrongAmounts[2] = 3;
 
         vm.expectRevert(AmountsNotEqualRoundsLength.selector);
-         mrc.voteERC20Permit(
-            votes,
-            rounds,
-            wrongAmounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            v,
-            r,
-            s
-        );
+        mrc.voteERC20Permit(votes, rounds, wrongAmounts, totalAmount, token1, type(uint256).max, v, r, s);
     }
 
     function testExcessAmountSent() public {
@@ -184,14 +127,8 @@ contract MrcTestVoteERC20Permit is Test {
 
         testERC20.mint(owner2, 110);
 
-        SigUtils.Permit memory permit2 = SigUtils.Permit({
-            owner: owner2,
-            spender: address(mrc),
-            value: 110,
-            nonce: 0,
-            deadline: type(uint256).max
-
-        });
+        SigUtils.Permit memory permit2 =
+            SigUtils.Permit({owner: owner2, spender: address(mrc), value: 110, nonce: 0, deadline: type(uint256).max});
 
         bytes32 digest2 = sigUtils.getTypedDataHash(permit2);
 
@@ -199,17 +136,7 @@ contract MrcTestVoteERC20Permit is Test {
 
         vm.prank(owner2);
         vm.expectRevert(ExcessAmountSent.selector);
-        mrc.voteERC20Permit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount2,
-            token1,
-            type(uint256).max,
-            v2,
-            r2,
-            s2
-        );
+        mrc.voteERC20Permit(votes, rounds, amounts, totalAmount2, token1, type(uint256).max, v2, r2, s2);
     }
 
     function testPermitAlreadyExistsAndVoteERC20PermitDoesNotRevert() public {
@@ -217,31 +144,15 @@ contract MrcTestVoteERC20Permit is Test {
         TestERC20(address(testERC20)).permit(owner, address(mrc), 100, type(uint256).max, v, r, s);
 
         // invalid permit with wrong value and nonce
-        SigUtils.Permit memory permit3 = SigUtils.Permit({
-            owner: owner,
-            spender: address(mrc),
-            value: 10,
-            nonce: 5,
-            deadline: type(uint256).max
-
-        });
+        SigUtils.Permit memory permit3 =
+            SigUtils.Permit({owner: owner, spender: address(mrc), value: 10, nonce: 5, deadline: type(uint256).max});
 
         bytes32 digest3 = sigUtils.getTypedDataHash(permit3);
 
         (uint8 v3, bytes32 r3, bytes32 s3) = vm.sign(ownerPrivateKey, digest3);
 
         vm.prank(owner);
-        mrc.voteERC20Permit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            v3,
-            r3,
-            s3
-        );
+        mrc.voteERC20Permit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, v3, r3, s3);
 
         assertEq(testERC20.balanceOf(owner), 0);
         assertEq(testERC20.balanceOf(address(votingStrategy)), 100);
@@ -249,14 +160,8 @@ contract MrcTestVoteERC20Permit is Test {
 
     function testPermitDoesNotExistAndVoteERC20PermitReverts() public {
         // invalid permit with wrong nonce
-        SigUtils.Permit memory permit3 = SigUtils.Permit({
-            owner: owner,
-            spender: address(mrc),
-            value: 100,
-            nonce: 5,
-            deadline: type(uint256).max
-
-        });
+        SigUtils.Permit memory permit3 =
+            SigUtils.Permit({owner: owner, spender: address(mrc), value: 100, nonce: 5, deadline: type(uint256).max});
 
         bytes32 digest3 = sigUtils.getTypedDataHash(permit3);
 
@@ -264,17 +169,7 @@ contract MrcTestVoteERC20Permit is Test {
 
         vm.expectRevert("ERC20Permit: invalid signature");
         vm.prank(owner);
-        mrc.voteERC20Permit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            v3,
-            r3,
-            s3
-        );
+        mrc.voteERC20Permit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, v3, r3, s3);
     }
 
     function testVoteERC20DoS() public {
@@ -288,21 +183,10 @@ contract MrcTestVoteERC20Permit is Test {
         // instead of checking that the final balance is zero, MRC checks
         // that the final balance is equal to the initial one.
         vm.prank(owner);
-        mrc.voteERC20Permit(
-            votes,
-            rounds,
-            amounts,
-            totalAmount,
-            token1,
-            type(uint256).max,
-            v,
-            r,
-            s
-        );
+        mrc.voteERC20Permit(votes, rounds, amounts, totalAmount, token1, type(uint256).max, v, r, s);
 
         assertEq(testERC20.allowance(owner, address(mrc)), 0);
         assertEq(testERC20.balanceOf(owner), 0);
         assertEq(testERC20.balanceOf(address(votingStrategy)), 100);
     }
 }
-

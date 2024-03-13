@@ -2,8 +2,8 @@
 pragma solidity ^0.8.17;
 
 struct MetaPtr {
-  uint256 protocol;
-  string pointer;
+    uint256 protocol;
+    string pointer;
 }
 
 interface IBetaRoundsRoundImplementation {
@@ -12,13 +12,9 @@ interface IBetaRoundsRoundImplementation {
         uint256 statusRow;
     }
 
-    function initialize(
-        bytes calldata encodedParameters,
-        address _alloSettings
-    ) external;
+    function initialize(bytes calldata encodedParameters, address _alloSettings) external;
 
-    function votingStrategy() external view returns(address);
-
+    function votingStrategy() external view returns (address);
 
     function updateMatchAmount(uint256 newAmount) external;
 
@@ -28,9 +24,7 @@ interface IBetaRoundsRoundImplementation {
 
     function updateRoundMetaPtr(MetaPtr memory newRoundMetaPtr) external;
 
-    function updateApplicationMetaPtr(
-        MetaPtr memory newApplicationMetaPtr
-    ) external;
+    function updateApplicationMetaPtr(MetaPtr memory newApplicationMetaPtr) external;
 
     function updateStartAndEndTimes(
         uint256 newApplicationsStartTime,
@@ -39,22 +33,13 @@ interface IBetaRoundsRoundImplementation {
         uint256 newRoundEndTime
     ) external;
 
-    function applyToRound(
-        bytes32 projectID,
-        MetaPtr calldata newApplicationMetaPtr
-    ) external;
+    function applyToRound(bytes32 projectID, MetaPtr calldata newApplicationMetaPtr) external;
 
-    function getApplicationIndexesByProjectID(
-        bytes32 projectID
-    ) external view returns (uint256[] memory);
+    function getApplicationIndexesByProjectID(bytes32 projectID) external view returns (uint256[] memory);
 
-    function setApplicationStatuses(
-        ApplicationStatus[] memory statuses
-    ) external;
+    function setApplicationStatuses(ApplicationStatus[] memory statuses) external;
 
-    function getApplicationStatus(
-        uint256 applicationIndex
-    ) external view returns (uint256);
+    function getApplicationStatus(uint256 applicationIndex) external view returns (uint256);
 
     function vote(bytes[] memory encodedVotes) external payable;
 

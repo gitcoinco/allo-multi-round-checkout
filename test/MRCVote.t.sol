@@ -60,7 +60,7 @@ contract MrcTestVote is Test {
         vm.deal(address(this), 10 ether);
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < amounts.length; i++) {
+        for (uint256 i = 0; i < amounts.length; i++) {
             totalValue += amounts[i];
         }
 
@@ -72,23 +72,22 @@ contract MrcTestVote is Test {
         vm.deal(address(this), 10 ether);
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < amounts.length; i++) {
+        for (uint256 i = 0; i < amounts.length; i++) {
             totalValue += amounts[i];
         }
 
         mrc.vote{value: totalValue}(votes, rounds, amounts);
 
         /* Assert that votes were passed on correctly */
-        for (uint i = 0; i < rounds.length; i++) {
-            bytes[] memory receivedVotes = MockRoundImplementationETH(rounds[i])
-                .getReceivedVotes();
-            for (uint j = 0; j < receivedVotes.length; j++) {
+        for (uint256 i = 0; i < rounds.length; i++) {
+            bytes[] memory receivedVotes = MockRoundImplementationETH(rounds[i]).getReceivedVotes();
+            for (uint256 j = 0; j < receivedVotes.length; j++) {
                 assertEq(receivedVotes[j], votes[i][j]);
             }
         }
 
         /* Assert that amounts were sent along correctly */
-        for (uint i = 0; i < rounds.length; i++) {
+        for (uint256 i = 0; i < rounds.length; i++) {
             assertEq(address(rounds[i]).balance, amounts[i]);
         }
     }
@@ -101,7 +100,7 @@ contract MrcTestVote is Test {
         roundsWrongLength[1] = address(round2);
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < amounts.length; i++) {
+        for (uint256 i = 0; i < amounts.length; i++) {
             totalValue += amounts[i];
         }
 
@@ -117,7 +116,7 @@ contract MrcTestVote is Test {
         wrongAmounts[1] = 2;
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < wrongAmounts.length; i++) {
+        for (uint256 i = 0; i < wrongAmounts.length; i++) {
             totalValue += wrongAmounts[i];
         }
 
@@ -129,7 +128,7 @@ contract MrcTestVote is Test {
         vm.deal(address(this), 10 ether);
 
         uint256 totalValue = 0;
-        for (uint i = 0; i < amounts.length; i++) {
+        for (uint256 i = 0; i < amounts.length; i++) {
             totalValue += amounts[i];
         }
 
@@ -155,4 +154,3 @@ contract MrcTestVote is Test {
         mrc.vote{value: totalValue}(votes, rounds, amounts);
     }
 }
-
