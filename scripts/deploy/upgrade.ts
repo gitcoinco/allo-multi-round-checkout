@@ -32,15 +32,13 @@ async function main() {
 
   console.log("Upgrading MultiRoundCheckout...");
 
-  const newMultiRoundCheckout = await ethers.getContractFactory("MultiRoundCheckout");
-
-  await upgrades.upgradeProxy(
-    MRC_PROXY_ADDRESS,
-    newMultiRoundCheckout,
-    {
-      unsafeAllowRenames: true,
-    }
+  const newMultiRoundCheckout = await ethers.getContractFactory(
+    "MultiRoundCheckout"
   );
+
+  await upgrades.upgradeProxy(MRC_PROXY_ADDRESS, newMultiRoundCheckout, {
+    unsafeAllowRenames: true,
+  });
 
   console.log("MultiRoundCheckout upgraded");
 }
