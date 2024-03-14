@@ -32,7 +32,7 @@ contract MultiRoundCheckout is OwnableUpgradeable, PausableUpgradeable, Reentran
         }
     }
 
-    function initialize(address _allo) public initializer {
+    function initialize(address _allo) public reinitializer(2) {
         __Ownable_init();
         __Pausable_init();
         __ReentrancyGuard_init();
