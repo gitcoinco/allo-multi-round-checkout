@@ -5,6 +5,7 @@ import { getEnv } from "../../lib/utils";
 async function main() {
   const network = await ethers.provider.getNetwork();
   const networkName = hre.network.name;
+  const allo = "0x1133eA7Af70876e64665ecD07C0A0476d09465a1";
   const MRC_PROXY_ADDRESS = ""; // TODO: Upgrade the MultiRoundCheckout contract
 
   let account;
@@ -38,6 +39,7 @@ async function main() {
 
   await upgrades.upgradeProxy(MRC_PROXY_ADDRESS, newMultiRoundCheckout, {
     unsafeAllowRenames: true,
+    call: { fn: "initialize", args: [allo] },
   });
 
   console.log("MultiRoundCheckout upgraded");
