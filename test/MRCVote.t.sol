@@ -19,7 +19,7 @@ contract MrcTestVote is Test {
         round2 = new MockRoundImplementationETH();
         round3 = new MockRoundImplementationETH();
         mrc = new MultiRoundCheckout();
-        mrc.initialize();
+        mrc.initialize(address(1));
 
         rounds[0] = address(round1);
         rounds[1] = address(round2);
