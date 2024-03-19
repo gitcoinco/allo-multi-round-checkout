@@ -35,6 +35,7 @@ contract MultiRoundCheckout is OwnableUpgradeable, PausableUpgradeable, Reentran
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
+        _pause();
     }
 
     function initialize(address _allo) public reinitializer(3) {
