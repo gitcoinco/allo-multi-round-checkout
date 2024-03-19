@@ -6,6 +6,7 @@ async function main() {
   const network = await ethers.provider.getNetwork();
   const networkName = hre.network.name;
   const allo = "0x1133eA7Af70876e64665ecD07C0A0476d09465a1";
+  const MRC_PROXY_ADDRESS = ""; // TODO: Upgrade the MultiRoundCheckout contract
 
   let account;
   let accountAddress;
@@ -28,35 +29,20 @@ async function main() {
   console.log(`account: ${accountAddress}`);
   console.log(`balance: ${pn(balance.toString())}`);
 
-  await prompt("do you want to deploy the MultiRoundCheckout contract?");
-  console.log("deploying...");
+  await prompt("do you want to upgrade the MultiRoundCheckout contract?");
 
-  const MultiRoundCheckout = await ethers.getContractFactory(
-    "MultiRoundCheckout",
-    account,
+  console.log("Upgrading MultiRoundCheckout...");
+
+  const newMultiRoundCheckout = await ethers.getContractFactory(
+    "MultiRoundCheckout"
   );
-  const instance = await upgrades.deployProxy(MultiRoundCheckout, [allo]);
-  await instance.waitForDeployment();
 
-  const tx = instance.deploymentTransaction();
-  if (tx === null) {
-    console.error("cannot fetch deployTransaction");
-    return;
-  }
+  await upgrades.upgradeProxy(MRC_PROXY_ADDRESS, newMultiRoundCheckout, {
+    unsafeAllowRenames: true,
+    call: { fn: "initialize", args: [allo] },
+  });
 
-  const rec = await tx.wait();
-  if (rec === null) {
-    console.error("cannot fetch receipt");
-    return;
-  }
-
-  const address = await instance.getAddress();
-
-  console.log("tx hash", tx.hash);
-  const gas = pn(rec.gasUsed.toString());
-  console.log(`gas used: ${gas}`);
-
-  console.log("MultiRoundCheckout to:", address);
+  console.log("MultiRoundCheckout upgraded");
 }
 
 // We recommend this pattern to be able to use async/await everywhere
