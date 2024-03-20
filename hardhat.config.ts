@@ -147,6 +147,7 @@ const config: HardhatUserConfig = {
       base: getEnv("ETHERSCAN_BASE_API_KEY"),
       scrollSepolia: getEnv("ETHERSCAN_SCROLL_API_KEY"),
       scroll: getEnv("ETHERSCAN_SCROLL_API_KEY"),
+      arbitrumOne: getEnv("ETHERSCAN_ARBITRUM_API_KEY"),
     },
     customChains: [
       {
@@ -155,6 +156,14 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://api.basescan.org/api",
           browserURL: "https://basescan.org",
+        },
+      },
+      {
+        network: "arbitrumOne",
+        chainId: 42161,
+        urls: {
+          apiURL: "https://api.arbiscan.io/api",
+          browserURL: "https://arbiscan.io",
         },
       },
       {
