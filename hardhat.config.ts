@@ -141,6 +141,7 @@ const config: HardhatUserConfig = {
       optimisticEthereum: getEnv("ETHERSCAN_OPTIMISM_API_KEY", ""),
       opera: getEnv("ETHERSCAN_FANTOM_API_KEY"),
       polygon: getEnv("ETHERSCAN_POLYGON_API_KEY"),
+      polygonMumbai: getEnv("ETHERSCAN_POLYGON_API_KEY"),
       avalanche: getEnv("ETHERSCAN_AVALANCHE_API_KEY"),
       scrollSepolia: getEnv("ETHERSCAN_SCROLL_API_KEY"),
       scroll: getEnv("ETHERSCAN_SCROLL_API_KEY"),
