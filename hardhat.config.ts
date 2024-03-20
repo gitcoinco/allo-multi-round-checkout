@@ -178,7 +178,7 @@ const config: HardhatUserConfig = {
         network: "scroll",
         chainId: 534352,
         urls: {
-          apiURL: "https://scrollscan.com/api",
+          apiURL: "https://api.scrollscan.com/api",
           browserURL: "https://scrollscan.com",
         },
       },
