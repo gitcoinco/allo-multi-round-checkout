@@ -144,10 +144,19 @@ const config: HardhatUserConfig = {
       polygon: getEnv("ETHERSCAN_POLYGON_API_KEY"),
       polygonMumbai: getEnv("ETHERSCAN_POLYGON_API_KEY"),
       avalanche: getEnv("ETHERSCAN_AVALANCHE_API_KEY"),
+      base: getEnv("ETHERSCAN_BASE_API_KEY"),
       scrollSepolia: getEnv("ETHERSCAN_SCROLL_API_KEY"),
       scroll: getEnv("ETHERSCAN_SCROLL_API_KEY"),
     },
     customChains: [
+      {
+        network: "base",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org",
+        },
+      },
       {
         network: "scrollSepolia",
         chainId: 534351,
