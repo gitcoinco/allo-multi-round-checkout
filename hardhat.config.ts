@@ -133,6 +133,34 @@ const config: HardhatUserConfig = {
       url: getEnv("SCROLL_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
     },
+    seiDevnet: {
+      url: getEnv("SEI_DEVNET_RPC_URL"),
+      accounts: account(),
+    },
+    celo: {
+      url: getEnv("CELO_RPC_URL"),
+      accounts: account(),
+    },
+    celoAlfajores: {
+      url: getEnv("CELO_ALFAJORES_RPC_URL"),
+      accounts: account(),
+    },
+    filecoin: {
+      url: getEnv("FILECOIN_RPC_URL"),
+      accounts: account(),
+    },
+    filecoinTestnet: {
+      url: getEnv("FILECOIN_TESTNET_RPC_URL"),
+      accounts: account(),
+    },
+    lukso: {
+      url: getEnv("LUKSO_RPC_URL"),
+      accounts: account(),
+    },
+    luksoTestnet: {
+      url: getEnv("LUKSO_TESTNET_RPC_URL"),
+      accounts: account(),
+    },
   },
   etherscan: {
     apiKey: {
