@@ -5,8 +5,8 @@ import { getEnv } from "../../lib/utils";
 // Script to transfer ownership of Ownable contracts.
 // It can be used both for ProxyAdmin and MultiRoundCheckout contracts.
 
-const CONTRACT_ADDRESS = "";
-const NEW_OWNER_ADDRESS = "";
+const CONTRACT_ADDRESS = "0x029dFAf686DfA0efdace5132ba422e9279D50b5b";
+const NEW_OWNER_ADDRESS = "0x79427367e9Be16353336D230De3031D489b1b3c3";
 
 async function main() {
   const network = await ethers.provider.getNetwork();
