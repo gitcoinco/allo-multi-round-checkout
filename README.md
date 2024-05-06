@@ -65,3 +65,13 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | zkSync Era        | 0x88e91283d97A482A9e0851dE335d58D97dCfF7b0 |
 | Scroll Sepolia | 0x8Bd6Bc246FAF14B767954997fF3966CD1c0Bf0f5 |
 | Scroll         | 0x8Bd6Bc246FAF14B767954997fF3966CD1c0Bf0f5|
+| Celo Alfajores | 0x8Ad0a1111B3d8453Ea9C444cA7d708A65BF81Def |
+| Celo           | 0xb1481E4Bb2a018670aAbF68952F73BE45bdAD62D |
+| Lukso          | 0x029dFAf686DfA0efdace5132ba422e9279D50b5b |
+| Lukso Testnet  | 0xC1087157eF2aaeBcaDB913251EA5B82c678424F7 |
+| Filecoin Calibration | 0x2447dD8C1f4cd4361a649564Bd441787edf8c03A |
+| Sei Devnet     | 0x313eC6CA225C40Bc670d8cd4b063734BD22ad1ab |
+
+
+
+
