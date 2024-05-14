@@ -9,7 +9,7 @@ contract MrcTestVote is Test {
 
     function setUp() public {
         mrc = new MultiRoundCheckout();
-        mrc.initialize();
+        mrc.initialize(address(1));
     }
 
     function testOwnership() public {
