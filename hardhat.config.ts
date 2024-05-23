@@ -133,6 +133,34 @@ const config: HardhatUserConfig = {
       url: getEnv("SCROLL_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
     },
+    seiDevnet: {
+      url: getEnv("SEI_DEVNET_RPC_URL"),
+      accounts: account(),
+    },
+    celo: {
+      url: getEnv("CELO_RPC_URL"),
+      accounts: account(),
+    },
+    celoAlfajores: {
+      url: getEnv("CELO_ALFAJORES_RPC_URL"),
+      accounts: account(),
+    },
+    filecoin: {
+      url: getEnv("FILECOIN_RPC_URL"),
+      accounts: account(),
+    },
+    filecoinTestnet: {
+      url: getEnv("FILECOIN_TESTNET_RPC_URL"),
+      accounts: account(),
+    },
+    lukso: {
+      url: getEnv("LUKSO_RPC_URL"),
+      accounts: account(),
+    },
+    luksoTestnet: {
+      url: getEnv("LUKSO_TESTNET_RPC_URL"),
+      accounts: account(),
+    },
   },
   etherscan: {
     apiKey: {
@@ -140,12 +168,32 @@ const config: HardhatUserConfig = {
       sepolia: getEnv("ETHERSCAN_ETHEREUM_API_KEY", ""),
       optimisticEthereum: getEnv("ETHERSCAN_OPTIMISM_API_KEY", ""),
       opera: getEnv("ETHERSCAN_FANTOM_API_KEY"),
+      ftmTestnet: getEnv("ETHERSCAN_FANTOM_API_KEY"),
       polygon: getEnv("ETHERSCAN_POLYGON_API_KEY"),
+      polygonMumbai: getEnv("ETHERSCAN_POLYGON_API_KEY"),
       avalanche: getEnv("ETHERSCAN_AVALANCHE_API_KEY"),
+      base: getEnv("ETHERSCAN_BASE_API_KEY"),
       scrollSepolia: getEnv("ETHERSCAN_SCROLL_API_KEY"),
       scroll: getEnv("ETHERSCAN_SCROLL_API_KEY"),
+      arbitrumOne: getEnv("ETHERSCAN_ARBITRUM_API_KEY"),
     },
     customChains: [
+      {
+        network: "base",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org",
+        },
+      },
+      {
+        network: "arbitrumOne",
+        chainId: 42161,
+        urls: {
+          apiURL: "https://api.arbiscan.io/api",
+          browserURL: "https://arbiscan.io",
+        },
+      },
       {
         network: "scrollSepolia",
         chainId: 534351,
@@ -158,7 +206,7 @@ const config: HardhatUserConfig = {
         network: "scroll",
         chainId: 534352,
         urls: {
-          apiURL: "https://scrollscan.com/api",
+          apiURL: "https://api.scrollscan.com/api",
           browserURL: "https://scrollscan.com",
         },
       },
