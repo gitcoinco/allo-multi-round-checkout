@@ -1,15 +1,9 @@
 import * as dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
-// import "@nomicfoundation/hardhat-toolbox";
 import "@openzeppelin/hardhat-upgrades";
 import { getEnv } from "./lib/utils";
 import "@nomicfoundation/hardhat-ledger";
 import { ethers } from "ethers";
-
-// import "@matterlabs/hardhat-zksync-deploy";
-// import "@matterlabs/hardhat-zksync-solc";
-// import "@matterlabs/hardhat-zksync-upgradable";
-// import "@matterlabs/hardhat-zksync-verify";
 
 dotenv.config();
 
@@ -31,13 +25,6 @@ const config: HardhatUserConfig = {
         enabled: true,
         runs: 400,
       },
-    },
-  },
-  zksolc: {
-    version: "1.3.17",
-    // compilerSource: "binary",
-    settings: {
-      // isSystem: true,
     },
   },
   networks: {
@@ -111,19 +98,6 @@ const config: HardhatUserConfig = {
     base: {
       url: getEnv("BASE_RPC_URL"),
       ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
-    },
-    zksyncEraGoerli: {
-      url: getEnv("ZKSYNC_ERA_GOERLI_RPC_URL"),
-      ethNetwork: "goerli",
-      zksync: true,
-    },
-    zksyncEra: {
-      url: getEnv("ZKSYNC_ERA_RPC_URL"),
-      ethNetwork: "mainnet",
-      zksync: true,
-      ledgerAccounts: [getEnv("HARDWARE_WALLET_ACCOUNT", ethers.ZeroAddress)],
-      verifyURL:
-        "https://zksync2-mainnet-explorer.zksync.io/contract_verification",
     },
     scrollSepolia: {
       url: getEnv("SCROLL_SEPOLIA_RPC_URL"),
