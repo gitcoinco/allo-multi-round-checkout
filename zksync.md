@@ -1,30 +1,21 @@
-## Deployment on zksync
+## Deployment on zkSync Era Testnet
 
+**Compile**
+`npx hardhat compile --network zkSyncTestnet --config era.hardhat.config.ts `
 
-To deploy, remove from hardhat.config.ts:
-```
-import "@openzeppelin/hardhat-upgrades";
-import "@matterlabs/hardhat-zksync-verify";
-```
+**Deploy**
+`npx hardhat deploy-zksync --network zkSyncTestnet --config era.hardhat.config.ts --script deployZkSync.ts`
 
-And add:
+**Verify**
+`npx hardhat verify --network zkSyncTestnet --config era.hardhat.config.ts 0x..`
 
-```
-import "@matterlabs/hardhat-zksync-deploy";
-import "@matterlabs/hardhat-zksync-solc";
-import "@matterlabs/hardhat-zksync-upgradable";
-import "@matterlabs/hardhat-zksync-verify";
-```
+## Deployment on zkSync Era Mainnet
 
-To verify, remove
-```
-import "@nomicfoundation/hardhat-toolbox";
-import "@openzeppelin/hardhat-upgrades";
-```
+**Compile**
+`npx hardhat compile --network zkSyncMainnet --config era.hardhat.config.ts `
 
-And add
-```
-import "@matterlabs/hardhat-zksync-verify";
-```
+**Deploy**
+`npx hardhat deploy-zksync --network zkSyncMainnet --config era.hardhat.config.ts --script deployZkSync.ts`
 
-npx hardhat verify --network zksyncEraGoerli 0x...
+**Verify**
+`npx hardhat verify --network zkSyncMainnet --config era.hardhat.config.ts 0x..`
