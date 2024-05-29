@@ -4,6 +4,7 @@ import "@openzeppelin/hardhat-upgrades";
 import { getEnv } from "./lib/utils";
 import "@nomicfoundation/hardhat-ledger";
 import { ethers } from "ethers";
+import "@xyrusworx/hardhat-solidity-json";
 
 dotenv.config();
 
@@ -109,6 +110,10 @@ const config: HardhatUserConfig = {
     },
     seiDevnet: {
       url: getEnv("SEI_DEVNET_RPC_URL"),
+      accounts: account(),
+    },
+    seiMainnet: {
+      url: getEnv("SEI_RPC_URL"),
       accounts: account(),
     },
     celo: {
