@@ -71,6 +71,7 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | Lukso Testnet     | 0xC1087157eF2aaeBcaDB913251EA5B82c678424F7 |
 | Filecoin Calibration | 0x2447dD8C1f4cd4361a649564Bd441787edf8c03A |
 | Sei Devnet        | 0x313eC6CA225C40Bc670d8cd4b063734BD22ad1ab |
+| Sei Mainnet       | 0x1E18cdce56B3754c4Dca34CB3a7439C24E8363de |
 
 
 
