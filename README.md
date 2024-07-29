@@ -72,7 +72,7 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | Filecoin Calibration | 0x2447dD8C1f4cd4361a649564Bd441787edf8c03A |
 | Sei Devnet        | 0x313eC6CA225C40Bc670d8cd4b063734BD22ad1ab |
 | Sei Mainnet       | 0x1E18cdce56B3754c4Dca34CB3a7439C24E8363de |
-
+| Metis Andromeda   | 0x710172b2C0aCc629A3FD23D436c347807dD5C412 |
 
 
 

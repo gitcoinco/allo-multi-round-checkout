@@ -140,6 +140,10 @@ const config: HardhatUserConfig = {
       url: getEnv("LUKSO_TESTNET_RPC_URL"),
       accounts: account(),
     },
+    metisAndromeda: {
+      url: getEnv("METIS_MAINNET_RPC_URL"),
+      accounts: account(),
+    },
   },
   etherscan: {
     apiKey: {
@@ -155,6 +159,7 @@ const config: HardhatUserConfig = {
       scrollSepolia: getEnv("ETHERSCAN_SCROLL_API_KEY"),
       scroll: getEnv("ETHERSCAN_SCROLL_API_KEY"),
       arbitrumOne: getEnv("ETHERSCAN_ARBITRUM_API_KEY"),
+      metisAndromeda: "no-api-key",
     },
     customChains: [
       {
@@ -189,6 +194,15 @@ const config: HardhatUserConfig = {
           browserURL: "https://scrollscan.com",
         },
       },
+      {
+        network: "metisAndromeda",
+        chainId: 1088,
+        urls: {
+          apiURL:
+            "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan",
+          browserURL: "https://explorer.metis.io",
+        }
+      }
     ],
   },
 };
