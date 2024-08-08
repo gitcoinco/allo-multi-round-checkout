@@ -267,6 +267,17 @@ contract MultiRoundCheckout is OwnableUpgradeable, PausableUpgradeable, Reentran
         _handleAllocate(Allocations(token, totalAmount, _poolIds, _amounts, _data));
     }
 
+    /**
+     * 
+     * allocateERC20: allocate donations for multiple rounds at once with ERC20 tokenswithout permit.
+     */
+    function allocateERC20(address token, uint256 totalAmount, uint256[] memory poolIds, uint256[] memory amounts, bytes[] memory data)
+        public nonReentrant whenNotPaused validateErc20Balance(token)
+    {
+        _transferToken(token, totalAmount);
+        _handleAllocate(Allocations(token, totalAmount, poolIds, amounts, data));
+    }
+
     function updateAllo(address _allo) public onlyOwner {
         allo = IAllo(_allo);
     }
