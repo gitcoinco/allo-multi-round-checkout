@@ -144,6 +144,10 @@ const config: HardhatUserConfig = {
       url: getEnv("METIS_MAINNET_RPC_URL"),
       accounts: account(),
     },
+    gnosis: {
+      url: getEnv("GNOSIS_RPC_URL"),
+      accounts: account(),
+    },
   },
   etherscan: {
     apiKey: {
@@ -160,6 +164,7 @@ const config: HardhatUserConfig = {
       scroll: getEnv("ETHERSCAN_SCROLL_API_KEY"),
       arbitrumOne: getEnv("ETHERSCAN_ARBITRUM_API_KEY"),
       metisAndromeda: "no-api-key",
+      xdai: getEnv("GNOSISSCAN_API_KEY"),
     },
     customChains: [
       {
