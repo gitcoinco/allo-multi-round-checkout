@@ -148,6 +148,10 @@ const config: HardhatUserConfig = {
       url: getEnv("GNOSIS_RPC_URL"),
       accounts: account(),
     },
+    hedera: {
+      url: getEnv("HEDERA_RPC_URL"),
+      accounts: account(),
+    },
   },
   etherscan: {
     apiKey: {
@@ -165,6 +169,7 @@ const config: HardhatUserConfig = {
       arbitrumOne: getEnv("ETHERSCAN_ARBITRUM_API_KEY"),
       metisAndromeda: "no-api-key",
       xdai: getEnv("GNOSISSCAN_API_KEY"),
+      hedera: getEnv("HEDERA_API_KEY"),
     },
     customChains: [
       {
@@ -206,8 +211,16 @@ const config: HardhatUserConfig = {
           apiURL:
             "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan",
           browserURL: "https://explorer.metis.io",
-        }
-      }
+        },
+      },
+      {
+        network: "hedera",
+        chainId: 295,
+        urls: {
+          apiURL: "https://api.hederaexplorer.io/api",
+          browserURL: "https://explorer.hedera.com",
+        },
+      },
     ],
   },
 };

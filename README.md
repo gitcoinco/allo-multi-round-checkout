@@ -26,6 +26,12 @@ npm i
 forge test
 ```
 
+## Deploy
+
+```
+npx hardhat deploy --network hedera
+```
+
 ## Deployment gas benchmark
 
 ```
@@ -74,5 +80,6 @@ npx hardhat run scripts/benchmarks/beta-rounds-bench.ts --network localhost
 | Sei Mainnet           | 0x1E18cdce56B3754c4Dca34CB3a7439C24E8363de |
 | Metis Andromeda       | 0x710172b2C0aCc629A3FD23D436c347807dD5C412 |
 | Gnosis                | 0xDE915119349E817f5012fa03f88F5C784d56A1fE |
+| Hedera Mainnet        | 0x1E18cdce56B3754c4Dca34CB3a7439C24E8363de |
 
 
